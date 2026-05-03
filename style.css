@@ -612,6 +612,7 @@ body {
   height:260px;
   overflow:hidden;
   background:#050508;
+  cursor:pointer;
 }
 .hero-vn__bg {
   position:absolute;
@@ -1454,9 +1455,14 @@ body {
   .hero-vn__report-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
   .hero-vn__stage { height:220px; }
   .hero-vn__hud { font-size:0.42rem; letter-spacing:0.1em; }
-  .hero-vn__sprite { left:42%; max-height:100%; }
+  .hero-vn__sprite,
+  .hero-vn__guest {
+    max-height:106%;
+    max-width:none;
+  }
+  .hero-vn__sprite { left:40%; }
   .hero-vn[data-face="normal"] .hero-vn__sprite { left:0; transform:none; }
-  .hero-vn__guest { right:-2%; max-height:90%; }
+  .hero-vn__guest { right:-5%; max-height:102%; max-width:none; }
   .hero-vn__dialogue { padding:12px; min-height:174px; }
   .hero-vn__line { font-size:0.82rem; line-height:1.7; }
   .hero-vn__actions { justify-content:stretch; }

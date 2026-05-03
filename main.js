@@ -483,26 +483,26 @@ function initHanidaeSim() {
   if(!root || !bg || !sprite || !guest || !stage || !location || !speaker || !line || !choices || !prev || !next || !restart) return;
 
   const ha = {
-    normal: '/vn-ha-woonjin-normal.png',
-    embarrassed: '/vn-ha-woonjin-embarrassed.png',
-    shy: '/vn-ha-woonjin-shy.png',
-    angry: '/vn-ha-woonjin-angry.png'
+    normal: '/vn-ha-woonjin-normal-opt.png',
+    embarrassed: '/vn-ha-woonjin-embarrassed-opt.png',
+    shy: '/vn-ha-woonjin-shy-opt.png',
+    angry: '/vn-ha-woonjin-angry-opt.png'
   };
 
   const scenes = {
-    campus: '/vn-bg-campus.png',
-    classroom: '/vn-bg-classroom.png',
-    control: '/vn-bg-control-room.png',
-    dorm: '/vn-bg-dormitory.png',
-    training: '/vn-bg-training-ground.png',
-    baekgolrim: '/vn-bg-baekgolrim-zone.png'
+    campus: '/vn-bg-campus-opt.jpg',
+    classroom: '/vn-bg-classroom-opt.jpg',
+    control: '/vn-bg-control-room-opt.jpg',
+    dorm: '/vn-bg-dormitory-opt.jpg',
+    training: '/vn-bg-training-ground-opt.jpg',
+    baekgolrim: '/vn-bg-baekgolrim-zone-opt.jpg'
   };
 
   const cast = {
-    eun: '/vn-eun-haeseong.png',
-    seo: '/vn-seo-jaeyoon.png',
-    kaname: '/vn-kaname.png',
-    yoon: '/vn-yoon-horang.png'
+    eun: '/vn-eun-haeseong-opt.png',
+    seo: '/vn-seo-jaeyoon-opt.png',
+    kaname: '/vn-kaname-opt.png',
+    yoon: '/vn-yoon-horang-opt.png'
   };
 
   const script = {
