@@ -663,12 +663,21 @@ body {
 .hero-vn__sprite { z-index:2; }
 .hero-vn__guest { z-index:3; }
 .hero-vn[data-speaker="ha"] .hero-vn__sprite { z-index:4; }
-.hero-vn[data-speaker="ha"] .hero-vn__guest { z-index:2; }
-.hero-vn[data-speaker="guest"] .hero-vn__sprite { z-index:2; }
+.hero-vn[data-speaker="ha"] .hero-vn__guest {
+  z-index:2;
+  opacity:0;
+  transform:translateX(24px);
+}
+.hero-vn[data-speaker="guest"] .hero-vn__sprite {
+  z-index:2;
+  opacity:0;
+}
 .hero-vn[data-speaker="guest"] .hero-vn__guest { z-index:4; }
 .hero-vn__sprite {
   left:50%;
   transform:translateX(-50%);
+  opacity:1;
+  transition:opacity 0.22s ease;
 }
 .hero-vn[data-face="normal"] .hero-vn__sprite {
   left:0;
