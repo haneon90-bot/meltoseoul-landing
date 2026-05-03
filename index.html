@@ -97,19 +97,29 @@
       <p class="hero__sub">
         2041년. 세계는 무너졌다.
       </p>
-      <div class="hero__footage">
-        <div class="hero__footage-bar">
-          <span>RESTRICTED FOOTAGE</span>
-          <span>CADEBA / BAEKGOLRIM</span>
+      <div class="hero__live">
+        <div class="hero__footage">
+          <div class="hero__footage-bar">
+            <span>RESTRICTED FOOTAGE</span>
+            <span>CADEBA / BAEKGOLRIM</span>
+          </div>
+          <video class="hero__footage-video" autoplay muted loop playsinline controls poster="/cadeba.jpg">
+            <source src="/main-visual.mp4" type="video/mp4">
+          </video>
+          <div class="hero__footage-brief">
+            <span>한이대 외곽 감시망 포착</span>
+            <strong>카데바 생체반응 확인. 교전 금지, 거리 유지.</strong>
+          </div>
+          <div class="hero__footage-caption">RECOVERED FROM OUTER SEOUL — CLASSIFIED VISUAL LOG</div>
         </div>
-        <video class="hero__footage-video" autoplay muted loop playsinline controls poster="/cadeba.jpg">
-          <source src="/main-visual.mp4" type="video/mp4">
-        </video>
-        <div class="hero__footage-brief">
-          <span>한이대 외곽 감시망 포착</span>
-          <strong>카데바 생체반응 확인. 교전 금지, 거리 유지.</strong>
-        </div>
-        <div class="hero__footage-caption">RECOVERED FROM OUTER SEOUL — CLASSIFIED VISUAL LOG</div>
+        <aside class="hero-live-chat" aria-label="종말넷 실시간 반응">
+          <div class="hero-live-chat__top">
+            <span><span class="blink">●</span> 종말넷 LIVE</span>
+            <strong id="live-viewers">12,482</strong>
+          </div>
+          <div class="hero-live-chat__feed" id="live-comment-feed"></div>
+          <div class="hero-live-chat__input">채팅 속도 제한 중 · 관제망 검열 활성화</div>
+        </aside>
       </div>
       <div class="hero__cta" style="flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 32px; max-width: 600px; margin-left: auto; margin-right: auto;">
         <a href="#lore" class="btn btn--ghost"><span class="btn__icon">◎</span> 세계관 / 시스템</a>

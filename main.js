@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupSmoothScroll();
   initFactionCards();
   initClickEffects();
+  initLiveComments();
 });
 
 function initIntroScreen() {
@@ -188,6 +189,53 @@ function initClickEffects() {
     if(event.target.closest('#intro-screen')) return;
     createStigmaRipple(event.clientX, event.clientY);
   });
+}
+
+function initLiveComments() {
+  const feed = document.getElementById('live-comment-feed');
+  const viewers = document.getElementById('live-viewers');
+  if(!feed) return;
+
+  const comments = [
+    { user: '마포잔류자', text: '저거 지금 눈 뜬 거 맞지? 제발 아니라고 해줘' },
+    { user: '한강북단', text: '한이대 뭐함??? 저걸 왜 보고만 있어' },
+    { user: '배급표12장', text: '채팅 느려지는 거 나만 그래? 플렉서스 검열 들어온 듯' },
+    { user: '뼈싫어', text: '백골림 애들 또 신탁이라고 난리치겠네' },
+    { user: '종로방공호', text: '소리 꺼놨는데도 심장 뛰는 느낌 남' },
+    { user: '녹원꺼져', text: '카데바가 저렇게 조용하면 그게 더 무서운 거 아니냐' },
+    { user: '익명_404', text: '좌표 뜨면 절대 공유하지 마라. 따라가는 사람 나온다' },
+    { user: '성흔없음', text: '저거 사람이야? 아니 그냥 재난 같은데' },
+    { user: '관악기숙사', text: '교전 금지 떴다. 한이대도 답 없다는 뜻임' },
+    { user: '흑접목격자', text: '서재윤 선생님 출동 안 함? 진짜 큰일 같은데' },
+    { user: '백골림탈주', text: '쟤네는 저걸 신이라고 부름. 미친 집단임' },
+    { user: '플렉서스신호', text: 'SYSTEM: 해당 영상은 외부 저장이 제한됩니다' },
+    { user: '새벽3시17분', text: '방금 프레임 깨진 거 카데바가 카메라 본 거 아님?' },
+    { user: '인천폐선로', text: '녹원 쪽도 조용한 게 이상함. 다들 숨죽인 듯' },
+    { user: '댓글그만봐', text: '나 이거 왜 계속 보고 있냐...' }
+  ];
+
+  let index = 0;
+  let viewerCount = 12482;
+
+  function addComment() {
+    const item = comments[index % comments.length];
+    const row = document.createElement('div');
+    row.className = 'live-comment';
+    row.innerHTML = `<span class="live-comment__user">${item.user}</span><span class="live-comment__text">${item.text}</span>`;
+    feed.appendChild(row);
+    while(feed.children.length > 8) feed.removeChild(feed.firstElementChild);
+    feed.scrollTop = feed.scrollHeight;
+    index++;
+
+    if(viewers) {
+      viewerCount += Math.floor(Math.random() * 47) - 13;
+      viewerCount = Math.max(11800, viewerCount);
+      viewers.textContent = viewerCount.toLocaleString('ko-KR');
+    }
+  }
+
+  for(let i = 0; i < 5; i++) addComment();
+  setInterval(addComment, 1800);
 }
 
 function createStigmaRipple(x, y) {
