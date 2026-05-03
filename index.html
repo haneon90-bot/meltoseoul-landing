@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>멸도회랑 — 서울은 아직 숨 쉬고 있다</title>
+  <meta name="description" content="2036년, 세계는 무너졌다. 서울만이 간신히 살아남은 마지막 생존권. 성흔이 새겨진 자들만이 이 도시를 지킨다." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@300;400;500;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="scanline-overlay" aria-hidden="true"></div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <!-- ═══════════════ SPLIT GATE (독립 레이어) ═══════════════ -->
+  <div id="split-gate-top" class="split-gate split-gate--top" style="background-image: url('/intro-bg.jpg');"></div>
+  <div id="split-gate-bottom" class="split-gate split-gate--bottom" style="background-image: url('/intro-bg.jpg');"></div>
+
+  <!-- ═══════════════ INTRO SCREEN (Premium V2) ═══════════════ -->
+  <div id="intro-screen" class="intro">
+    <!-- Ambient backgrounds -->
+    <div class="intro__bg-image" style="background-image: url('/intro-bg.jpg');"></div>
+    <div class="intro__void" aria-hidden="true"></div>
+    <div class="intro__dust" aria-hidden="true"></div>
+    <div class="intro__scan-reveal" aria-hidden="true"></div>
+    <div class="intro__overlay" aria-hidden="true"></div>
+    <div class="intro__vignette" aria-hidden="true"></div>
+    
+    <!-- Top HUD -->
+    <div class="intro__hud intro__hud--top-left">SYS_CORE: PLEXUS_NET // SECURE_CHANNEL</div>
+    <div class="intro__hud intro__hud--top-right blink-slow">WARNING: CLASS-4 AHEAD</div>
+    
+    <!-- Center Console -->
+    <div class="intro__center">
+      <div class="intro__brand">AUTHORIZED PERSONNEL ONLY</div>
+      <h1 class="intro__title" data-text="滅都回廊">滅都回廊</h1>
+      <div class="intro__divider"></div>
+      <div class="intro__subtitle">서울 단일 생존권 관제망 접속 프로토콜</div>
+      
+      <div class="intro__action">
+        <div class="intro__status" id="intro-status">AWAITING AUTHORIZATION...</div>
+        <div class="intro__gauge" id="intro-gauge" aria-hidden="true">
+          <div class="intro__gauge-fill" id="intro-gauge-fill"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Bottom HUD -->
+    <div class="intro__hud intro__hud--bottom">
+      <span class="data-stream" aria-hidden="true">01100110 01100001 01110100 01100101 00100000 01101111 01100110 00100000 01110011 01100101 01101111 01110101 01101100</span>
+    </div>
+  </div>
+
+  <!-- Character Dossier Modal -->
+  <div class="modal-overlay" id="dossier-modal" aria-hidden="true">
+    <div class="modal-panel">
+      <button class="modal-close" id="modal-close" aria-label="닫기">✕</button>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ 1. HERO ═══════════════ -->
+  <section id="hero" class="section hero">
+    <div class="hero__bg-grid" aria-hidden="true"></div>
+    <div class="hero__noise" aria-hidden="true"></div>
+    <div class="hero__plexus-hud" aria-hidden="true">
+      <div class="hero__scan-beam"></div>
+      <div class="plexus-map">
+        <div class="plexus-map__route plexus-map__route--a"></div>
+        <div class="plexus-map__route plexus-map__route--b"></div>
+        <div class="plexus-map__route plexus-map__route--c"></div>
+        <div class="plexus-marker plexus-marker--seoul"><span>SEOUL CORE</span></div>
+        <div class="plexus-marker plexus-marker--mapo"><span>MAPO CLASS-4</span></div>
+        <div class="plexus-marker plexus-marker--incheon"><span>INCHEON BREACH</span></div>
+      </div>
+      <div class="plexus-panel plexus-panel--left">
+        <span>PLEXUS GRID</span>
+        <strong>SEOUL SHIELD: 71%</strong>
+        <em>OUTER WARDS UNSTABLE</em>
+      </div>
+      <div class="plexus-panel plexus-panel--right">
+        <span>ANOMALY TRACE</span>
+        <strong>BAEKGOLRIM / NOKWON</strong>
+        <em>HOSTILE ROUTES ACTIVE</em>
+      </div>
+    </div>
+    <div class="hero__content">
+      <div class="hero__brand">멸도회랑</div>
+      <div class="hero__system-tag">
+        <span class="blink">●</span> PLEXUS NETWORK — STATUS: <span class="text-warning">CRITICAL</span>
+      </div>
+      <h1 class="hero__title glitch" data-text="외곽 감시망에 종말급 반응 감지">
+        외곽 감시망에<br/>종말급 반응 감지
+      </h1>
+      <p class="hero__sub">
+        2041년. 세계는 무너졌다.
+      </p>
+      <div class="hero__footage">
+        <div class="hero__footage-bar">
+          <span>RESTRICTED FOOTAGE</span>
+          <span>CADEBA / BAEKGOLRIM</span>
+        </div>
+        <video class="hero__footage-video" autoplay muted loop playsinline controls poster="/cadeba.jpg">
+          <source src="/main-visual.mp4" type="video/mp4">
+        </video>
+        <div class="hero__footage-brief">
+          <span>한이대 외곽 감시망 포착</span>
+          <strong>카데바 생체반응 확인. 교전 금지, 거리 유지.</strong>
+        </div>
+        <div class="hero__footage-caption">RECOVERED FROM OUTER SEOUL — CLASSIFIED VISUAL LOG</div>
+      </div>
+      <div class="hero__cta" style="flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 32px; max-width: 600px; margin-left: auto; margin-right: auto;">
+        <a href="#lore" class="btn btn--ghost"><span class="btn__icon">◎</span> 세계관 / 시스템</a>
+        <a href="#factions" class="btn btn--primary"><span class="btn__icon">▶</span> 세력</a>
+        <a href="#characters" class="btn btn--ghost"><span class="btn__icon">✦</span> 인물</a>
+        <a href="#community" class="btn btn--ghost"><span class="btn__icon">⬢</span> 종말넷</a>
+        <a href="#interactive" class="btn btn--ghost"><span class="btn__icon">◈</span> 성흔 발현</a>
+      </div>
+      <div class="hero__scroll-hint">
+        <div class="scroll-line"></div>
+        <span>SCROLL</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 2. FACTIONS ═══════════════ -->
+  <section id="factions" class="section factions">
+    <div class="section__header">
+      <span class="section__tag">FACTION INTEL — 열람 허가</span>
+      <h2 class="section__title">세 력</h2>
+
+    </div>
+    <div class="factions__grid">
+      <div class="faction-card faction-card--hanidae" data-faction="hanidae">
+        <div class="faction-card__glow"></div>
+        <div class="faction-card__stripe"></div>
+        <div class="faction-card__header">
+          <div class="faction-card__icon">盾</div>
+          <div class="faction-card__rank">질서 · 방위</div>
+        </div>
+        <h3 class="faction-card__name">한국이능대학</h3>
+        <p class="faction-card__alias">한이대 · 韓異大</p>
+        <p class="faction-card__desc">
+          서울 치안과 방위를 담당하는 아카데미형 전투 조직.
+          플렉서스가 창립했으며, 학생들을 실전 투입하여 생존권을 사수한다.
+          A반과 B반 — 경쟁은 생존의 촉매.
+        </p>
+        <div class="faction-card__stats">
+          <div class="faction-card__stat"><span class="label">영역</span><span class="value">서울 생존권</span></div>
+          <div class="faction-card__stat"><span class="label">목적</span><span class="value">문명 복구 · 인재 양성 · 생활권 회복</span></div>
+          <div class="faction-card__stat"><span class="label">행동</span><span class="value">교육 · 구조 · 소탕 · A/B반 경쟁 구도</span></div>
+        </div>
+      </div>
+      <div class="faction-card faction-card--baekgolrim" data-faction="baekgolrim">
+        <div class="faction-card__glow"></div>
+        <div class="faction-card__stripe"></div>
+        <div class="faction-card__header">
+          <div class="faction-card__icon">骸</div>
+          <div class="faction-card__rank">혼돈 · 파괴</div>
+        </div>
+        <h3 class="faction-card__name">백골림</h3>
+        <p class="faction-card__alias">白骨林</p>
+        <p class="faction-card__desc">
+          카데바를 살아있는 신으로 모시는 광신 집단.
+          그러나 카데바는 그들에게 속하지도, 관심을 두지도 않는다.
+          남는 것은 숭배와 약탈, 통제 불능의 파괴뿐이다.
+        </p>
+        <div class="faction-card__stats">
+          <div class="faction-card__stat"><span class="label">영역</span><span class="value">서울 외곽 · 폐허 · 무법지대</span></div>
+          <div class="faction-card__stat"><span class="label">목적</span><span class="value">카데바 숭배 · 혼돈 집결</span></div>
+          <div class="faction-card__stat"><span class="label">행동</span><span class="value">규율 부재 · 약탈 · 파괴</span></div>
+        </div>
+      </div>
+      <div class="faction-card faction-card--nokwon" data-faction="nokwon">
+        <div class="faction-card__glow"></div>
+        <div class="faction-card__stripe"></div>
+        <div class="faction-card__header">
+          <div class="faction-card__icon">蔓</div>
+          <div class="faction-card__rank">침식 · 대체</div>
+        </div>
+        <h3 class="faction-card__name">녹원</h3>
+        <p class="faction-card__alias">綠園</p>
+        <p class="faction-card__desc">
+          이록을 중심으로 한 식생 침식 군락.
+          식물로 건물을 집어삼키고, 도시 기능을 마비시킨다.
+          인간 문명을 자연으로 되돌리는 것이 목적.
+        </p>
+        <div class="faction-card__stats">
+          <div class="faction-card__stat"><span class="label">영역</span><span class="value">인천 · 식생 침식 구역</span></div>
+          <div class="faction-card__stat"><span class="label">목적</span><span class="value">문명 침식 · 식생 권역 확장</span></div>
+          <div class="faction-card__stat"><span class="label">행동</span><span class="value">오염 · 확산 · 도시 기능 마비</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="factions__relations">
+      <div class="relation"><span class="relation__from">한이대</span><span class="relation__line relation__line--hostile">⚔ 적대</span><span class="relation__to">백골림</span></div>
+      <div class="relation"><span class="relation__from">한이대</span><span class="relation__line relation__line--hostile">⚔ 적대</span><span class="relation__to">녹원</span></div>
+      <div class="relation"><span class="relation__from">백골림</span><span class="relation__line relation__line--uneasy">◇ 비동맹</span><span class="relation__to">녹원</span></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 3. CHARACTERS ═══════════════ -->
+  <section id="characters" class="section characters">
+    <div class="section__header">
+      <span class="section__tag">CLASSIFIED DOSSIER — 기밀 열람</span>
+      <h2 class="section__title">인 물</h2>
+      <p class="section__sub">관제 등급 파일. 열람 시 각오할 것. 상세 정보는 파일 접근 필요.</p>
+    </div>
+    <div class="characters__tabs">
+      <button class="char-tab active" data-tab="hanidae">한이대</button>
+      <button class="char-tab" data-tab="baekgolrim">백골림</button>
+      <button class="char-tab" data-tab="nokwon">녹원</button>
+      <button class="char-tab" data-tab="unaffiliated">무소속</button>
+    </div>
+    <div class="characters__grid" id="characters-grid"></div>
+  </section>
+
+  <!-- ═══════════════ 4-1. LORE (세계관) ═══════════════ -->
+  <section id="lore" class="section lore">
+    <div class="section__header">
+      <span class="section__tag">WORLDVIEW — 코어 아카이브</span>
+      <h2 class="section__title">세계관</h2>
+      <p class="section__sub">서울은 여전히 버티고 있다. 하지만 그 밖은 지옥이 된 지 오래다.</p>
+    </div>
+    <div class="world__timeline">
+      <div class="timeline__header">세계 연표</div>
+      <div class="timeline">
+        <div class="timeline__item"><div class="timeline__year">2026</div><div class="timeline__event">극소수에게 성흔 발현. 이능력자의 존재가 확인됨.</div></div>
+        <div class="timeline__item"><div class="timeline__year">2036</div><div class="timeline__event">대재앙. 종말급 빌런들에 의해 세계 각국 정부 전복. 무정부 상태 돌입.</div></div>
+        <div class="timeline__item"><div class="timeline__year">2036~</div><div class="timeline__event">한반도: 카데바에 의한 정부 전복, 이록에 의한 문명 파괴. 서울 밖은 철저한 무법지대.</div></div>
+        <div class="timeline__item timeline__item--now"><div class="timeline__year">2041년 현재</div><div class="timeline__event">서울 — 플렉서스의 초전도신경망으로 간신히 전력과 통신 유지 중. 인류의 마지막 생존권.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 4-2. SYSTEM (성흔 체계) ═══════════════ -->
+  <section id="system" class="section world">
+    <div class="section__header">
+      <span class="section__tag">SYSTEM CODEX — 관제 데이터</span>
+      <h2 class="section__title">성흔 체계</h2>
+      <p class="section__sub">이능의 근원. 극도의 스트레스가 새기는 문신. 그것이 성흔이다.</p>
+    </div>
+    <div class="world__grid">
+      <div class="system-panel">
+        <div class="system-panel__header"><span class="system-panel__icon">◈</span><span>성흔 (聖痕)</span></div>
+        <div class="system-panel__visual system-panel__visual--stigma" aria-hidden="true">
+          <div class="stigma-mark stigma-mark--outer"></div>
+          <div class="stigma-mark stigma-mark--inner"></div>
+          <div class="stigma-mark stigma-mark--core"></div>
+        </div>
+        <div class="system-panel__body">
+          <p>이능의 근원인 문신. 극도의 스트레스 상황에서 발현된다.</p>
+          <p>한번 새겨진 성흔은 지울 수 없으며, 각인된 자는 이능력자로 분류된다.</p>
+        </div>
+      </div>
+      <div class="system-panel">
+        <div class="system-panel__header"><span class="system-panel__icon">⬡</span><span>성흔력</span></div>
+        <div class="system-panel__visual system-panel__visual--power" aria-hidden="true">
+          <div class="stigma-wave stigma-wave--a"></div>
+          <div class="stigma-wave stigma-wave--b"></div>
+          <div class="stigma-wave stigma-wave--c"></div>
+          <div class="stigma-meter"><span></span></div>
+        </div>
+        <div class="system-panel__body">
+          <p>이능을 사용하기 위한 소모 자원.</p>
+          <p>고갈 시 능력 사용이 불가하며, 과도한 소모는 신체에 치명적 반동을 일으킨다.</p>
+        </div>
+      </div>
+      <div class="system-panel">
+        <div class="system-panel__header"><span class="system-panel__icon">✦</span><span>만개 (滿開)</span></div>
+        <div class="system-panel__visual system-panel__visual--bloom" aria-hidden="true">
+          <div class="bloom-ring bloom-ring--outer"></div>
+          <div class="bloom-ring bloom-ring--inner"></div>
+          <div class="bloom-burst"></div>
+        </div>
+        <div class="system-panel__body">
+          <p>극소수만이 각성한 필살기. 성흔의 완전한 해방 상태.</p>
+          <p>발동 시 성흔력의 대규모 소모를 수반한다.</p>
+        </div>
+      </div>
+      <div class="system-panel system-panel--wide">
+        <div class="system-panel__header"><span class="system-panel__icon">▲</span><span>위계 분류 체계</span></div>
+        <div class="threat-visual" aria-hidden="true">
+          <div class="threat-visual__radar"></div>
+          <div class="threat-visual__rings"></div>
+          <div class="threat-visual__pulse threat-visual__pulse--a"></div>
+          <div class="threat-visual__pulse threat-visual__pulse--b"></div>
+          <div class="threat-visual__label">CLASSIFICATION LADDER</div>
+        </div>
+        <div class="system-panel__body">
+          <div class="threat-scale">
+            <div class="threat-level threat-level--caution"><div class="threat-level__badge">주의급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:25%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>소규모 그룹에 대한 위협</div></div>
+            <div class="threat-level threat-level--threat"><div class="threat-level__badge">위협급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:50%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>지역구~도시 규모 위협</div></div>
+            <div class="threat-level threat-level--disaster"><div class="threat-level__badge">참사급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:75%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>대도시~국가 규모 위협</div></div>
+            <div class="threat-level threat-level--apocalypse"><div class="threat-level__badge">종말급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:100%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>대륙 규모 위협</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 5. CHAT ═══════════════ -->
+  <section id="chat" class="section chat">
+    <div class="section__header">
+      <span class="section__tag">COMM INTERCEPT — 교신 감청</span>
+      <h2 class="section__title">통 신</h2>
+      <p class="section__sub">플렉서스 위성망을 통해 수신된 교신 기록.</p>
+    </div>
+    <div class="chat__container">
+      <div class="chat__window">
+        <div class="chat__topbar"><span class="blink">●</span> PLEXUS COMM — 암호화 채널<span class="chat__time">2036.09.14 03:27</span></div>
+        <div class="chat__messages" id="chat-messages"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 6. COMMUNITY ═══════════════ -->
+  <section id="community" class="section community">
+    <div class="section__header">
+      <span class="section__tag">종말넷 — TERMINAL ACCESS</span>
+      <h2 class="section__title">종말넷</h2>
+      <p class="section__sub">전 세계 유일의 온라인 커뮤니티. 플렉서스 위성망으로 유지 중.</p>
+    </div>
+    <div class="community__board" id="community-board"></div>
+  </section>
+
+  <!-- ═══════════════ 7. INTERACTIVE HUB ═══════════════ -->
+  <section id="interactive" class="section interactive">
+    <div class="section__header">
+      <span class="section__tag">TERMINAL — 시뮬레이션 허브</span>
+      <h2 class="section__title">관제 터미널</h2>
+      <p class="section__sub">생존권 관제 시스템에 접속하여 시뮬레이션을 실행하십시오.</p>
+    </div>
+    <div class="interactive__tabs">
+      <button class="inter-tab active" data-panel="stigma">성흔 발현</button>
+      <button class="inter-tab" data-panel="faction-test">세력 적성 검사</button>
+    </div>
+
+    <!-- Panel: Stigma Generator -->
+    <div class="inter-panel active" id="panel-stigma">
+      <div class="inter-panel__header">
+        <span class="inter-panel__tag">STIGMA ANALYSIS</span>
+        <span class="inter-panel__title">성흔 발현 시뮬레이션</span>
+      </div>
+      <div class="stigma-gen">
+        <div class="stigma-gen__display" id="stigma-display">
+          <div class="stigma-gen__idle"><div class="stigma-gen__symbol">◈</div><p>성흔 분석 대기 중...</p></div>
+        </div>
+        <button class="btn btn--primary btn--large" id="stigma-btn"><span class="btn__icon">◈</span> 성흔 발현</button>
+      </div>
+    </div>
+
+    <!-- Panel: Faction Test -->
+    <div class="inter-panel" id="panel-faction-test">
+      <div class="inter-panel__header">
+        <span class="inter-panel__tag">ALIGNMENT PROTOCOL</span>
+        <span class="inter-panel__title">세력 적성 검사</span>
+      </div>
+      <div class="faction-test" id="faction-test-container"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 8. FINAL CTA ═══════════════ -->
+  <section id="final-cta" class="section final-cta">
+    <div class="final-cta__content">
+      <div class="final-cta__system">PLEXUS NETWORK — 접속 요청 감지</div>
+      <h2 class="final-cta__title">살아남을 수 있는가?</h2>
+      <p class="final-cta__sub">
+        서울의 마지막 방어선에 합류하라.<br/>
+        살아남고자 하는 의지가 이 도시의 내일을 결정한다.
+      </p>
+      <a href="#hero" class="btn btn--primary btn--large"><span class="btn__icon">▶</span> 접속</a>
+      <div class="final-cta__fade"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__content">
+      <span class="footer__brand">멸도회랑</span>
+      <span class="footer__divider">|</span>
+      <span class="footer__copy">© 2036 PLEXUS NETWORK. 서울 생존권 관제 시스템.</span>
+    </div>
+  </footer>
+
+  <!-- ═══════════════ MOBILE NAV ═══════════════ -->
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="#lore" class="mobile-nav__item">
+      <span class="icon">◎</span>
+      <span class="label">세계관</span>
+    </a>
+    <a href="#system" class="mobile-nav__item">
+      <span class="icon">◈</span>
+      <span class="label">체계</span>
+    </a>
+    <a href="#factions" class="mobile-nav__item">
+      <span class="icon">盾</span>
+      <span class="label">세력</span>
+    </a>
+    <a href="#characters" class="mobile-nav__item">
+      <span class="icon">⬡</span>
+      <span class="label">인물</span>
+    </a>
+    <a href="#community" class="mobile-nav__item">
+      <span class="icon">✦</span>
+      <span class="label">종말넷</span>
+    </a>
+    <a href="#interactive" class="mobile-nav__item">
+      <span class="icon">▲</span>
+      <span class="label">터미널</span>
+    </a>
+  </nav>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>
