@@ -586,24 +586,65 @@ function initHanidaeSim() {
     vnAudioContext ??= new AudioCtx();
     const fire = () => {
       const now = vnAudioContext.currentTime + 0.01;
-      const osc = vnAudioContext.createOscillator();
-      const gain = vnAudioContext.createGain();
-      const filter = vnAudioContext.createBiquadFilter();
-      const freq = tone === 'choice' ? 900 : 620;
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(freq, now);
-      osc.frequency.exponentialRampToValueAtTime(freq * 0.58, now + 0.075);
-      filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(freq * 1.15, now);
-      filter.Q.setValueAtTime(7, now);
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.13, now + 0.008);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.095);
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(vnAudioContext.destination);
-      osc.start(now);
-      osc.stop(now + 0.11);
+      const makeTone = (freq, type, peak, duration, endFreq = freq * 0.58) => {
+        const osc = vnAudioContext.createOscillator();
+        const gain = vnAudioContext.createGain();
+        const filter = vnAudioContext.createBiquadFilter();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration * 0.78);
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(freq * 1.15, now);
+        filter.Q.setValueAtTime(7, now);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(peak, now + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(vnAudioContext.destination);
+        osc.start(now);
+        osc.stop(now + duration + 0.02);
+      };
+
+      const makeNoise = (peak = 0.18, duration = 0.18) => {
+        const bufferSize = Math.max(1, Math.floor(vnAudioContext.sampleRate * duration));
+        const buffer = vnAudioContext.createBuffer(1, bufferSize, vnAudioContext.sampleRate);
+        const data = buffer.getChannelData(0);
+        for(let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+        }
+        const src = vnAudioContext.createBufferSource();
+        const gain = vnAudioContext.createGain();
+        const filter = vnAudioContext.createBiquadFilter();
+        src.buffer = buffer;
+        filter.type = 'highpass';
+        filter.frequency.setValueAtTime(1300, now);
+        filter.frequency.exponentialRampToValueAtTime(420, now + duration);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(peak, now + 0.012);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+        src.connect(filter);
+        filter.connect(gain);
+        gain.connect(vnAudioContext.destination);
+        src.start(now);
+        src.stop(now + duration + 0.02);
+      };
+
+      if(tone === 'danger') {
+        makeNoise(0.24, 0.2);
+        makeTone(520, 'sawtooth', 0.18, 0.16, 170);
+        return;
+      }
+      if(tone === 'good') {
+        makeTone(720, 'triangle', 0.18, 0.11, 960);
+        setTimeout(() => makeTone(980, 'triangle', 0.13, 0.09, 1220), 45);
+        return;
+      }
+      if(tone === 'choice') {
+        makeTone(900, 'square', 0.2, 0.11);
+        return;
+      }
+      makeTone(620, 'square', 0.18, 0.1);
     };
 
     if(vnAudioContext.state === 'suspended') {
@@ -727,7 +768,7 @@ function initHanidaeSim() {
         btn.type = 'button';
         btn.textContent = choice.label;
         btn.addEventListener('click', () => {
-          playVnClick('choice');
+          playVnClick(choice.effect || 'choice');
           history.push(snapshot());
           applyImpact(choice.impact);
           index = choice.next;
