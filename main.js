@@ -11,7 +11,7 @@ const CHARACTERS = {
     { id: 'ha-woonjin', name: '하운진', aliases: ['A반 학생'], threat: 'threat', stigma: '왼쪽 어깨 (연꽃무늬)', ability: '무공. 성흔력으로 무공을 구현하여 압도적인 체술을 발휘한다.', bloom: '만다라 폭발 (천수 환영 소환)', desc: 'A반 학생.', height: '179cm', nationality: '중국', quote: '내 뒤에 서 있어! 방해만 하지 말라고.' },
     { id: 'yomiya-kaname', name: '요미야 카나메', aliases: ['A반 학생'], threat: 'threat', stigma: '왼쪽 눈 (붕대로 은폐)', ability: '영혼절단. 죽음의 기운을 전기톱에 둘러 육체와 영혼을 분리한다.', bloom: '유골도문 (죽음의 영역, 영혼 약화)', desc: 'A반 학생.', height: '183cm', nationality: '일본', quote: '에~ 피 나올까요? 뼈 모양 이쁘겠다, 그쵸?' },
     { id: 'choi-geon', name: '최건', aliases: ['B반 학생', '탈 쓴 은둔형 강자'], threat: 'disaster', stigma: '사타구니', ability: '즉석 메카조립. 주변 무기물과 부품을 조합해 전투용 메카를 즉석에서 조립한다.', bloom: '테디메기드 (기계 테디베어 소환)', desc: 'B반 학생.', height: '192cm', nationality: '대한민국', quote: '`[ 님 쫄? ㅋㅋ ]`' },
-    { id: 'yoon-horang', name: '윤호랑', aliases: ['B반 학생'], threat: 'caution', stigma: '왼쪽 등 상단', ability: '수인화. 송곳니와 발톱을 포함한 수인 신체 강화.', bloom: '호쇄결박 (목의 쇠사슬로 속박)', desc: 'B반 학생.', height: '189cm', nationality: '대한민국', quote: '이 정도는 끄떡없어, 좋아♪' }
+    { id: 'yoon-horang', name: '윤호랑', aliases: ['B반 학생', '부산 사투리 분위기메이커'], threat: 'caution', stigma: '왼쪽 등 상단', ability: '수인화. 송곳니와 발톱을 포함한 수인 신체 강화.', bloom: '호쇄결박 (목의 쇠사슬로 속박)', desc: 'B반 학생. 부산 사투리를 쓰며 플러팅과 가벼운 농담이 잦은 낙천적인 분위기메이커.', height: '189cm', nationality: '대한민국', quote: '이 정도는 끄떡없다 아이가, 좋아♪' }
   ],
   baekgolrim: [
     { id: 'cadeba', name: '카데바', aliases: ['백골림의 살아있는 신', '무소속 재앙'], threat: 'apocalypse', stigma: '전신을 덮은 검은 부족 문신', ability: '골격 증식. 자신의 뼈를 증식, 변형, 사출하여 무기로 쓴다.', bloom: '백골만상 (뼈다발 광역 돌출 및 폭격)', desc: '백골림이 신으로 떠받드는 한반도 종말의 원인. 본인은 그 집단에 속하지도, 관심을 두지도 않는다.', height: '210cm', nationality: '불명', quote: '비명 질러!!! 더 크게!!! 아하하하하!!!' }
@@ -41,12 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initInteractiveTabs();
   initStigmaGenerator();
   initFactionTest();
+  initHanidaeSim();
   initDossierModal();
   initMobileNav();
   setupSmoothScroll();
   initFactionCards();
   initClickEffects();
-  initLiveComments();
+  initBreakingNews();
 });
 
 function initIntroScreen() {
@@ -191,51 +192,39 @@ function initClickEffects() {
   });
 }
 
-function initLiveComments() {
-  const feed = document.getElementById('live-comment-feed');
-  const viewers = document.getElementById('live-viewers');
+function initBreakingNews() {
+  const feed = document.getElementById('breaking-news-feed');
+  const ticker = document.getElementById('breaking-news-ticker');
+  const severity = document.getElementById('breaking-severity');
   if(!feed) return;
 
-  const comments = [
-    { user: '마포잔류자', text: '저거 지금 눈 뜬 거 맞지? 제발 아니라고 해줘' },
-    { user: '한강북단', text: '한이대 뭐함??? 저걸 왜 보고만 있어' },
-    { user: '배급표12장', text: '채팅 느려지는 거 나만 그래? 플렉서스 검열 들어온 듯' },
-    { user: '뼈싫어', text: '백골림 애들 또 신탁이라고 난리치겠네' },
-    { user: '종로방공호', text: '소리 꺼놨는데도 심장 뛰는 느낌 남' },
-    { user: '녹원꺼져', text: '카데바가 저렇게 조용하면 그게 더 무서운 거 아니냐' },
-    { user: '익명_404', text: '좌표 뜨면 절대 공유하지 마라. 따라가는 사람 나온다' },
-    { user: '성흔없음', text: '저거 사람이야? 아니 그냥 재난 같은데' },
-    { user: '관악기숙사', text: '교전 금지 떴다. 한이대도 답 없다는 뜻임' },
-    { user: '흑접목격자', text: '서재윤 선생님 출동 안 함? 진짜 큰일 같은데' },
-    { user: '백골림탈주', text: '쟤네는 저걸 신이라고 부름. 미친 집단임' },
-    { user: '플렉서스신호', text: 'SYSTEM: 해당 영상은 외부 저장이 제한됩니다' },
-    { user: '새벽3시17분', text: '방금 프레임 깨진 거 카데바가 카메라 본 거 아님?' },
-    { user: '인천폐선로', text: '녹원 쪽도 조용한 게 이상함. 다들 숨죽인 듯' },
-    { user: '댓글그만봐', text: '나 이거 왜 계속 보고 있냐...' }
+  const news = [
+    { tag: '긴급', title: '마포 외곽 폐허지대에서 종말급 생체반응 재확인', body: '한이대 관제망은 해당 개체를 카데바로 추정. 현장 접근 및 독자적 교전을 금지했다.', level: 'CLASS-5' },
+    { tag: '속보', title: '백골림 잔당, 감시 영상 공개 직후 집단 이동', body: '일부 추종 세력이 카데바 출현을 신탁으로 해석하며 서울 외곽으로 집결 중이다.', level: 'CLASS-4' },
+    { tag: '관제', title: '플렉서스 위성망, 영상 좌표 자동 삭제 조치', body: '좌표 확산으로 인한 민간인 접근을 차단하기 위해 원본 위치 정보가 검열 처리됐다.', level: 'LOCKED' },
+    { tag: '경고', title: '외곽 방공호 7곳에 대피 권고 발령', body: '인접 구역 주민은 지하 통로 이용을 중단하고 한이대 임시 대피선 안쪽으로 이동해야 한다.', level: 'ALERT' },
+    { tag: '분석', title: '카데바 활동량 감소, 교전 전조 가능성 제기', body: '움직임이 없다는 사실 자체가 위험 신호라는 분석이 종말넷 생존자 게시판에서 확산 중이다.', level: 'CLASS-5' },
+    { tag: '차단', title: '종말넷 관련 게시물 238건 위험 정보로 분류', body: '카데바 감시 영상의 무단 저장본과 추적 루머가 플렉서스 필터에 의해 차단됐다.', level: 'FILTER' }
   ];
 
   let index = 0;
-  let viewerCount = 12482;
 
-  function addComment() {
-    const item = comments[index % comments.length];
-    const row = document.createElement('div');
-    row.className = 'live-comment';
-    row.innerHTML = `<span class="live-comment__user">${item.user}</span><span class="live-comment__text">${item.text}</span>`;
-    feed.appendChild(row);
-    while(feed.children.length > 8) feed.removeChild(feed.firstElementChild);
-    feed.scrollTop = feed.scrollHeight;
+  function showNews() {
+    const item = news[index % news.length];
+    feed.innerHTML = `
+      <article class="breaking-item">
+        <div class="breaking-item__meta"><span>${item.tag}</span><strong>${item.level}</strong></div>
+        <div class="breaking-item__title">${item.title}</div>
+        <div class="breaking-item__body">${item.body}</div>
+      </article>
+    `;
+    if(ticker) ticker.textContent = `${item.tag} · ${item.title}`;
+    if(severity) severity.textContent = item.level;
     index++;
-
-    if(viewers) {
-      viewerCount += Math.floor(Math.random() * 47) - 13;
-      viewerCount = Math.max(11800, viewerCount);
-      viewers.textContent = viewerCount.toLocaleString('ko-KR');
-    }
   }
 
-  for(let i = 0; i < 5; i++) addComment();
-  setInterval(addComment, 1800);
+  showNews();
+  setInterval(showNews, 3600);
 }
 
 function createStigmaRipple(x, y) {
@@ -476,6 +465,317 @@ function initFactionTest() {
     scores[opt.dataset.val]++; cur++; renderQ();
   });
   renderQ();
+}
+
+function initHanidaeSim() {
+  const root = document.getElementById('hanidae-sim');
+  const bg = document.getElementById('vn-bg');
+  const sprite = document.getElementById('vn-sprite');
+  const guest = document.getElementById('vn-guest');
+  const stage = root.querySelector('.hero-vn__stage');
+  const location = document.getElementById('vn-location');
+  const speaker = document.getElementById('vn-speaker');
+  const line = document.getElementById('vn-line');
+  const choices = document.getElementById('vn-choices');
+  const prev = document.getElementById('vn-prev');
+  const next = document.getElementById('vn-next');
+  const restart = document.getElementById('vn-restart');
+  if(!root || !bg || !sprite || !guest || !stage || !location || !speaker || !line || !choices || !prev || !next || !restart) return;
+
+  const ha = {
+    normal: '/vn-ha-woonjin-normal.png',
+    embarrassed: '/vn-ha-woonjin-embarrassed.png',
+    shy: '/vn-ha-woonjin-shy.png',
+    angry: '/vn-ha-woonjin-angry.png'
+  };
+
+  const scenes = {
+    campus: '/vn-bg-campus.png',
+    classroom: '/vn-bg-classroom.png',
+    control: '/vn-bg-control-room.png',
+    dorm: '/vn-bg-dormitory.png',
+    training: '/vn-bg-training-ground.png',
+    baekgolrim: '/vn-bg-baekgolrim-zone.png'
+  };
+
+  const cast = {
+    eun: '/vn-eun-haeseong.png',
+    seo: '/vn-seo-jaeyoon.png',
+    kaname: '/vn-kaname.png',
+    yoon: '/vn-yoon-horang.png'
+  };
+
+  const script = {
+    start: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.normal, speaker: '하운진', text: '...신입? 거기 멀뚱히 서 있지 말고 따라와. 여긴 구경하러 오는 곳 아니거든.', next: 'classroom' },
+    classroom: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, speaker: '하운진', text: '여기가 A반. 수업은 수업이고, 실전은 실전이야. 졸면 다치고, 멋대로 나서면 더 다쳐.', next: 'control' },
+    control: { bg: scenes.control, loc: '중앙관제실', face: ha.normal, speaker: '하운진', text: '저쪽이 중앙관제실. 플렉서스가 서울 전력, 방벽, 감시망을 전부 물고 있어. 기분 나쁠 정도로 정확하지.', next: 'eunIntro' },
+    eunIntro: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.normal, guest: cast.eun, guestName: '은해성', speaker: '은해성', text: '신입분이시군요. 너무 긴장하지 않으셔도 괜찮아요. 다친 곳이 있으면 이쪽으로 와주세요. 혼자 참지 않으셔도 됩니다.', next: 'eunChoice' },
+    eunChoice: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.shy, guest: cast.eun, guestName: '은해성', speaker: '하운진', text: '은 선생님은 웃으면서 사람을 꿰뚫어 보니까 대충 넘길 생각 하지 마. 너라면 뭐라고 대답할 건데?', choices: [
+      { label: '조금 다친 것 같다고 말한다', next: 'eunHonest', impact: { trust: 2, stability: 2 }, effect: 'good' },
+      { label: '괜찮다고 숨긴다', next: 'eunHide', impact: { trust: -1, risk: 1, stability: -1 }, effect: 'danger' },
+      { label: '하운진도 검사받으라고 한다', next: 'eunTease', impact: { trust: 1, aclass: 1 }, effect: 'good' }
+    ] },
+    eunHonest: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.normal, guest: cast.eun, guestName: '은해성', speaker: '은해성', text: '말씀해주셔서 고마워요. 솔직하게 알리는 건 생존률을 높입니다. 상처는 제가 볼 테니, 다음부터도 먼저 보고해주세요.', next: 'seoIntro' },
+    eunHide: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.angry, guest: cast.eun, guestName: '은해성', speaker: '은해성', text: '괜찮다고 말씀하시는 분들이 제일 걱정됩니다. 무리하지 마세요. 하운진 씨, 이분은 잠깐 더 확인하고 보내겠습니다.', next: 'haEunReact' },
+    eunTease: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.embarrassed, guest: cast.eun, guestName: '은해성', speaker: '하운진', text: '야, 왜 갑자기 나야? 난 멀쩡하거든. ...은 선생님, 웃지 마세요.', next: 'seoIntro' },
+    haEunReact: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.angry, guest: cast.eun, guestName: '은해성', speaker: '하운진', text: '봤지? 여기선 안 아픈 척하는 게 제일 빨리 들켜. 다음부터는 그냥 말해.', next: 'seoIntro' },
+    seoIntro: { bg: scenes.classroom, loc: 'B반 교실 앞', face: ha.normal, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '신입? 씨발... 또 늘었네. 안 뒤졌으면 대답해라. A반이든 B반이든, 느린 놈부터 갈려나가.', next: 'seoChoice' },
+    seoChoice: { bg: scenes.classroom, loc: 'B반 교실 앞', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '하운진', text: '서 선생님 말은 험해도 틀리진 않아. 지금 대답 잘못하면 바로 굴려질걸. 어떻게 할래?', choices: [
+      { label: '버틸 수 있다고 답한다', next: 'seoBrave', impact: { risk: 1, bclass: 1 }, effect: 'good' },
+      { label: '살려달라고 농담한다', next: 'seoJoke', impact: { risk: 2, bclass: 2 }, effect: 'danger' },
+      { label: '하운진 뒤로 조용히 숨는다', next: 'seoHide', impact: { trust: 1, aclass: 1 }, effect: 'soft' }
+    ] },
+    seoBrave: { bg: scenes.classroom, loc: 'B반 교실 앞', face: ha.normal, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '말은 하네. 좋아, 그 허세가 언제 꺾이는지 보자. 하운진, 훈련소로 데려가.', next: 'dorm' },
+    seoJoke: { bg: scenes.classroom, loc: 'B반 교실 앞', face: ha.embarrassed, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '농담할 힘 있으면 팔굽혀펴기 백 개는 하겠네. 축하한다, 오늘 일정 생겼다.', next: 'haSeoReact' },
+    seoHide: { bg: scenes.classroom, loc: 'B반 교실 앞', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '하운진', text: '내 뒤에 서 있으랬지, 내 뒤에 숨으랬냐? ...그래도 처음이면 그럴 수 있어. 이번만 봐준다.', next: 'dorm' },
+    haSeoReact: { bg: scenes.classroom, loc: 'B반 교실 앞', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '하운진', text: '그러게 왜 서 선생님 앞에서 입을 털어. 나까지 분위기 이상해졌잖아.', next: 'dorm' },
+    dorm: { bg: scenes.dorm, loc: '기숙사', face: ha.shy, speaker: '하운진', text: '기숙사는... 뭐, 생각보다 멀쩡해. 시끄럽게 굴지만 않으면 나쁘진 않아. 진짜로.', next: 'training' },
+    training: { bg: scenes.training, loc: '훈련소', face: ha.angry, speaker: '하운진', text: '훈련소에서는 장난치지 마. 성흔력은 멋있는 장식이 아니라, 네 몸을 갉아먹는 무기니까.', next: 'routeChoice' },
+    routeChoice: { bg: scenes.training, loc: '훈련소', face: ha.normal, speaker: '하운진', text: '자, 신입. 첫날부터 물어볼게. 너라면 어디부터 더 확인할 건데?', choices: [
+      { label: 'A반 교실', next: 'kanameIntro', impact: { aclass: 1, risk: 1 }, effect: 'soft' },
+      { label: '훈련소', next: 'yoonIntro', impact: { bclass: 1 }, effect: 'good' },
+      { label: '백골림 권역', next: 'baekgolrimWarn', impact: { risk: 2, stability: -1 }, effect: 'danger' }
+    ] },
+    kanameIntro: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '에~ 신입이에요? 무서워하지 마세요. 아직은 안 자를 거니까요?', next: 'kanameChoice' },
+    kanameChoice: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '요미야. 첫 안내에서 그런 소리 하지 말라고 했지. 신입, 뭐라고 받아칠래?', choices: [
+      { label: '안 자르면 괜찮다고 한다', next: 'kanameBold', impact: { risk: 2, aclass: 1 }, effect: 'danger' },
+      { label: '하운진 뒤로 물러난다', next: 'kanameHide', impact: { trust: 1, stability: 1 }, effect: 'good' },
+      { label: '전기톱은 어디 있냐고 묻는다', next: 'kanameSaw', impact: { risk: 2, aclass: 1 }, effect: 'danger' }
+    ] },
+    kanameBold: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '와아, 담력 좋다. 그런 사람일수록 안쪽이 어떻게 생겼는지 궁금해지는데요?', next: 'haKanameReact' },
+    kanameHide: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '잘했어. 쟤 웃고 있어도 절대 등 돌리지 마. 특히 “궁금하다”는 말 나오면 바로 피해.', next: 'ending' },
+    kanameSaw: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '에헤헤. 궁금해요? 보여드릴까요? 뼈 모양 이쁘게 남는 쪽으로요.', next: 'haKanameReact' },
+    haKanameReact: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '요미야, 그만. 그리고 신입, 너도 이상한 쪽으로 호기심 보이지 마. 여기 그런 애들 이미 충분히 많아.', next: 'ending' },
+    yoonIntro: { bg: scenes.training, loc: '훈련소', face: ha.normal, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '훈련부터 보겠다고? 좋다 아이가. 몸으로 부딪히는 아들은 오래 살아남는다. 근데 신입아, 너무 빡빡하게 굴진 마라. 밤엔 좀 풀 줄도 알아야지, 좋아♪', next: 'yoonChoice' },
+    yoonChoice: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '윤호랑 선배. 입문 안내 중에 그런 식으로 들이대지 마세요. 신입, 저 사람한테 뭐라고 할래?', choices: [
+      { label: '훈련만 부탁한다고 선 긋는다', next: 'yoonLine', impact: { stability: 1, bclass: 1 }, effect: 'good' },
+      { label: '부산 사투리를 따라 해본다', next: 'yoonDialect', impact: { bclass: 2, risk: 1 }, effect: 'soft' },
+      { label: '하운진에게 대신 말해달라고 한다', next: 'yoonHa', impact: { trust: 1, stability: 1 }, effect: 'good' }
+    ] },
+    yoonLine: { bg: scenes.training, loc: '훈련소', face: ha.normal, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '오, 선 긋는 거 보소. 좋다. 훈련은 진짜로 봐줄게. 대신 쓰러지면 내가 업고 간다, 좋아♪', next: 'haYoonReact' },
+    yoonDialect: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '억양 와 그라노? 귀엽긴 한데, 부산 사람 앞에서 그라면 혼난다 아이가.', next: 'haYoonReact' },
+    yoonHa: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '나한테 떠넘기지 마. ...그래도 윤호랑 선배, 신입 겁먹었잖아요. 적당히 하세요.', next: 'ending' },
+    haYoonReact: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '저 사람 말은 반만 들어. 실력은 진짜니까 거기까지만 믿고, 나머지는 전부 흘려.', next: 'ending' },
+    baekgolrimWarn: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, speaker: '하운진', text: '야, 미쳤어? 거긴 입문 코스가 아니라 사망 코스야. 지도에서 봤다고 실제로 갈 생각 하지 마.', next: 'baekgolrimChoice' },
+    baekgolrimChoice: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '외곽? 신입이 첫날부터 자살 관광 코스를 고르네. 이유나 들어보자.', choices: [
+      { label: '위험 구역부터 알고 싶다고 한다', next: 'baekgolrimSerious', impact: { risk: 1, stability: 1 }, effect: 'soft' },
+      { label: '실수로 눌렀다고 한다', next: 'baekgolrimMistake', impact: { stability: 1 }, effect: 'good' },
+      { label: '카데바가 궁금하다고 한다', next: 'baekgolrimCadeba', impact: { risk: 3, stability: -1 }, effect: 'danger' }
+    ] },
+    baekgolrimSerious: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.normal, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '방향은 틀렸지만 태도는 낫네. 위험 구역은 현장 가서 배우는 게 아니라 살아 돌아온 기록으로 배우는 거다.', next: 'ending' },
+    baekgolrimMistake: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.embarrassed, speaker: '하운진', text: '...그럴 줄 알았어. 첫날부터 외곽 누르는 신입이 정상일 리가 없지. 돌아가자.', next: 'ending' },
+    baekgolrimCadeba: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '카데바가 궁금하면 관제 영상이나 봐. 실제로 보면 궁금증보다 유언이 먼저 나온다.', next: 'ending' },
+    ending: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.shy, speaker: '하운진', text: '...그래도 여기까지 들었으면 됐어. 살아남고 싶으면 혼자 잘난 척하지 마. 내 뒤에 서. 방해만 하지 말고.' }
+  };
+
+  let index = 'start';
+  const history = [];
+  let vnAudioContext;
+  let stats = { trust: 1, risk: 0, stability: 1, aclass: 0, bclass: 0 };
+  const statEls = {
+    trust: { fill: root.querySelector('[data-stat-fill="trust"]'), value: root.querySelector('[data-stat-value="trust"]') },
+    risk: { fill: root.querySelector('[data-stat-fill="risk"]'), value: root.querySelector('[data-stat-value="risk"]') },
+    stability: { fill: root.querySelector('[data-stat-fill="stability"]'), value: root.querySelector('[data-stat-value="stability"]') },
+    aclass: { fill: root.querySelector('[data-stat-fill="aclass"]'), value: root.querySelector('[data-stat-value="aclass"]') },
+    bclass: { fill: root.querySelector('[data-stat-fill="bclass"]'), value: root.querySelector('[data-stat-value="bclass"]') }
+  };
+
+  function playVnClick(tone = 'soft') {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if(!AudioCtx) return;
+    vnAudioContext ??= new AudioCtx();
+    const fire = () => {
+      const now = vnAudioContext.currentTime + 0.01;
+      const osc = vnAudioContext.createOscillator();
+      const gain = vnAudioContext.createGain();
+      const filter = vnAudioContext.createBiquadFilter();
+      const freq = tone === 'choice' ? 900 : 620;
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(freq, now);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.58, now + 0.075);
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(freq * 1.15, now);
+      filter.Q.setValueAtTime(7, now);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.13, now + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.095);
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(vnAudioContext.destination);
+      osc.start(now);
+      osc.stop(now + 0.11);
+    };
+
+    if(vnAudioContext.state === 'suspended') {
+      vnAudioContext.resume().then(fire).catch(() => {});
+      return;
+    }
+    fire();
+  }
+
+  function snapshot() {
+    return { index, stats: { ...stats } };
+  }
+
+  function restore(state) {
+    index = state.index;
+    stats = { ...state.stats };
+  }
+
+  function applyImpact(impact = {}) {
+    Object.entries(impact).forEach(([key, value]) => {
+      stats[key] = Math.max(0, Math.min(5, (stats[key] ?? 0) + value));
+    });
+  }
+
+  function updateStats() {
+    Object.entries(statEls).forEach(([key, el]) => {
+      const value = stats[key] ?? 0;
+      if(el.fill) el.fill.style.width = `${value * 20}%`;
+      if(el.value) el.value.textContent = value;
+    });
+  }
+
+  function flashStage(effect = 'soft') {
+    root.classList.remove('vn-effect--soft', 'vn-effect--good', 'vn-effect--danger');
+    void root.offsetWidth;
+    root.classList.add(`vn-effect--${effect}`);
+    setTimeout(() => root.classList.remove(`vn-effect--${effect}`), 520);
+  }
+
+  function getEndingResult() {
+    if(stats.risk >= 5) {
+      return {
+        title: 'ENDING 04 — 외곽 출입 금지',
+        desc: '호기심과 위험 감수 성향이 높게 감지되었습니다. 플렉서스는 당분간 외곽 임무 접근 권한을 제한합니다.',
+        assign: '추천 배속: 한이대 임시 보호 관찰'
+      };
+    }
+    if(stats.bclass >= 4) {
+      return {
+        title: 'ENDING 03 — B반 관심 대상',
+        desc: '서재윤과 윤호랑의 관심권에 들어왔습니다. 생존 가능성은 있으나 훈련 강도가 급상승할 가능성이 큽니다.',
+        assign: '추천 배속: B반 합동 훈련 후보'
+      };
+    }
+    if(stats.trust >= 4 && stats.stability >= 3) {
+      return {
+        title: 'ENDING 01 — 한이대 정규 신입',
+        desc: '보고 태도와 성흔 안정도가 양호합니다. 하운진의 안내 아래 기본 적응 과정을 진행할 수 있습니다.',
+        assign: '추천 배속: A반 임시 관찰'
+      };
+    }
+    if(stats.aclass >= 3) {
+      return {
+        title: 'ENDING 02 — A반 보호 관찰',
+        desc: 'A반 인물들과의 접점이 강하게 형성되었습니다. 카나메 관련 위험 대응 교육이 필요합니다.',
+        assign: '추천 배속: A반 보호 관찰'
+      };
+    }
+    return {
+      title: 'ENDING 00 — 관찰 대상',
+      desc: '특정 적성이 두드러지지 않습니다. 한이대 기본 관찰 기간을 거친 뒤 세부 배속을 결정합니다.',
+      assign: '추천 배속: 미정'
+    };
+  }
+
+  function renderReport() {
+    if(index !== 'ending') return;
+    const result = getEndingResult();
+    const rows = [
+      ['신뢰도', stats.trust],
+      ['위험도', stats.risk],
+      ['성흔 안정도', stats.stability],
+      ['A반 적응', stats.aclass],
+      ['B반 관심', stats.bclass]
+    ].map(([label, value]) => `<div class="hero-vn__report-row"><span>${label}</span><strong>${value}/5</strong></div>`).join('');
+    choices.innerHTML = `
+      <div class="hero-vn__report">
+        <div class="hero-vn__report-kicker">PLEXUS ORIENTATION RESULT</div>
+        <div class="hero-vn__report-title">${result.title}</div>
+        <div class="hero-vn__report-desc">${result.desc}</div>
+        <div class="hero-vn__report-grid">${rows}</div>
+        <div class="hero-vn__report-assign">${result.assign}</div>
+      </div>
+    `;
+  }
+
+  function render() {
+    const scene = script[index];
+    root.dataset.face = scene.face === ha.normal ? 'normal' : 'variant';
+    root.dataset.speaker = scene.speaker === '하운진' ? 'ha' : 'guest';
+    root.dataset.guest = scene.guestName || 'none';
+    bg.src = scene.bg;
+    sprite.src = scene.face;
+    location.textContent = scene.loc;
+    speaker.textContent = scene.speaker;
+    line.textContent = scene.text;
+    choices.innerHTML = '';
+    guest.classList.remove('active');
+    guest.removeAttribute('src');
+    guest.removeAttribute('alt');
+    if(scene.guest) {
+      guest.src = scene.guest;
+      guest.alt = scene.guestName || scene.speaker;
+      guest.classList.add('active');
+    }
+    if(scene.choices) {
+      next.disabled = true;
+      scene.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'hero-vn__choice';
+        btn.type = 'button';
+        btn.textContent = choice.label;
+        btn.addEventListener('click', () => {
+          playVnClick('choice');
+          history.push(snapshot());
+          applyImpact(choice.impact);
+          index = choice.next;
+          flashStage(choice.effect);
+          render();
+        });
+        choices.appendChild(btn);
+      });
+    } else {
+      next.disabled = false;
+      renderReport();
+    }
+    prev.disabled = history.length === 0 && index === 'start';
+    updateStats();
+    root.classList.remove('is-advancing');
+    void root.offsetWidth;
+    root.classList.add('is-advancing');
+  }
+
+  function advanceScene() {
+    const scene = script[index];
+    if(scene.choices) return;
+    playVnClick('soft');
+    history.push(snapshot());
+    index = scene.next ?? 'start';
+    render();
+  }
+
+  next.addEventListener('click', advanceScene);
+  stage.addEventListener('click', advanceScene);
+
+  prev.addEventListener('click', () => {
+    if(history.length) {
+      playVnClick('soft');
+      restore(history.pop());
+      render();
+    }
+  });
+
+  restart.addEventListener('click', () => {
+    playVnClick('choice');
+    index = 'start';
+    stats = { trust: 1, risk: 0, stability: 1, aclass: 0, bclass: 0 };
+    history.length = 0;
+    render();
+  });
+
+  render();
 }
 
 function initDossierModal() {

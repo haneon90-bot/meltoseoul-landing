@@ -97,6 +97,47 @@
       <p class="hero__sub">
         2041년. 세계는 무너졌다.
       </p>
+      <div class="hero-vn" id="hanidae-sim">
+        <div class="hero-vn__header">
+          <span>HANIDAE ORIENTATION SIM</span>
+          <strong>입문자 접근 허가</strong>
+        </div>
+        <div class="hero-vn__notice">
+          <span class="blink">●</span>
+          <strong>상호작용 가능</strong>
+          <span>이미지 영역을 클릭해 대사를 진행하고, 선택지로 반응을 고르십시오.</span>
+        </div>
+        <div class="hero-vn__stats" aria-label="입문 평가 수치">
+          <div class="hero-vn__stat"><span>신뢰도</span><i><b data-stat-fill="trust"></b></i><em data-stat-value="trust">1</em></div>
+          <div class="hero-vn__stat"><span>위험도</span><i><b data-stat-fill="risk"></b></i><em data-stat-value="risk">0</em></div>
+          <div class="hero-vn__stat"><span>성흔 안정도</span><i><b data-stat-fill="stability"></b></i><em data-stat-value="stability">1</em></div>
+          <div class="hero-vn__stat"><span>A반 적응</span><i><b data-stat-fill="aclass"></b></i><em data-stat-value="aclass">0</em></div>
+          <div class="hero-vn__stat"><span>B반 관심</span><i><b data-stat-fill="bclass"></b></i><em data-stat-value="bclass">0</em></div>
+        </div>
+        <div class="hero-vn__stage">
+          <img class="hero-vn__bg" id="vn-bg" src="/vn-bg-campus.png" alt="" />
+          <div class="hero-vn__shade"></div>
+          <div class="hero-vn__hud">
+            <span id="vn-location">한이대 캠퍼스</span>
+            <strong>TRAINEE ACCESS</strong>
+          </div>
+          <img class="hero-vn__sprite" id="vn-sprite" src="/vn-ha-woonjin-normal.png" alt="하운진" />
+          <img class="hero-vn__guest" id="vn-guest" alt="" />
+        </div>
+        <div class="hero-vn__dialogue">
+          <div class="hero-vn__speaker" id="vn-speaker">하운진</div>
+          <p class="hero-vn__line" id="vn-line">입문 시뮬레이션 대기 중.</p>
+          <div class="hero-vn__choices" id="vn-choices"></div>
+          <div class="hero-vn__actions">
+            <button class="btn btn--ghost" id="vn-prev"><span class="btn__icon">◀</span> 이전</button>
+            <button class="btn btn--primary" id="vn-next"><span class="btn__icon">▶</span> 진행</button>
+            <button class="btn btn--ghost" id="vn-restart"><span class="btn__icon">◎</span> 처음부터</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero__divider" aria-hidden="true">
+        <span>OUTER SEOUL SURVEILLANCE FEED</span>
+      </div>
       <div class="hero__live">
         <div class="hero__footage">
           <div class="hero__footage-bar">
@@ -112,13 +153,13 @@
           </div>
           <div class="hero__footage-caption">RECOVERED FROM OUTER SEOUL — CLASSIFIED VISUAL LOG</div>
         </div>
-        <aside class="hero-live-chat" aria-label="종말넷 실시간 반응">
-          <div class="hero-live-chat__top">
-            <span><span class="blink">●</span> 종말넷 LIVE</span>
-            <strong id="live-viewers">12,482</strong>
+        <aside class="hero-breaking" aria-label="종말넷 긴급 속보">
+          <div class="hero-breaking__top">
+            <span><span class="blink">●</span> 종말넷 속보</span>
+            <strong id="breaking-severity">CLASS-5</strong>
           </div>
-          <div class="hero-live-chat__feed" id="live-comment-feed"></div>
-          <div class="hero-live-chat__input">채팅 속도 제한 중 · 관제망 검열 활성화</div>
+          <div class="hero-breaking__feed" id="breaking-news-feed"></div>
+          <div class="hero-breaking__ticker" id="breaking-news-ticker">플렉서스 위성망: 외곽 영상 자료 검열 대기 중</div>
         </aside>
       </div>
       <div class="hero__cta" style="flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 32px; max-width: 600px; margin-left: auto; margin-right: auto;">
@@ -127,6 +168,7 @@
         <a href="#characters" class="btn btn--ghost"><span class="btn__icon">✦</span> 인물</a>
         <a href="#community" class="btn btn--ghost"><span class="btn__icon">⬢</span> 종말넷</a>
         <a href="#interactive" class="btn btn--ghost"><span class="btn__icon">◈</span> 성흔 발현</a>
+        <a href="#hanidae-sim" class="btn btn--primary"><span class="btn__icon">▣</span> 입문 시뮬</a>
       </div>
       <div class="hero__scroll-hint">
         <div class="scroll-line"></div>
@@ -135,7 +177,92 @@
     </div>
   </section>
 
-  <!-- ═══════════════ 2. FACTIONS ═══════════════ -->
+  <!-- ═══════════════ 2-1. LORE (세계관) ═══════════════ -->
+  <section id="lore" class="section lore">
+    <div class="section__header">
+      <span class="section__tag">WORLDVIEW — 코어 아카이브</span>
+      <h2 class="section__title">세계관</h2>
+      <p class="section__sub">서울은 여전히 버티고 있다. 하지만 그 밖은 지옥이 된 지 오래다.</p>
+    </div>
+    <div class="world__timeline">
+      <div class="timeline__header">세계 연표</div>
+      <div class="timeline">
+        <div class="timeline__item"><div class="timeline__year">2026</div><div class="timeline__event">극소수에게 성흔 발현. 이능력자의 존재가 확인됨.</div></div>
+        <div class="timeline__item"><div class="timeline__year">2036</div><div class="timeline__event">대재앙. 종말급 빌런들에 의해 세계 각국 정부 전복. 무정부 상태 돌입.</div></div>
+        <div class="timeline__item"><div class="timeline__year">2036~</div><div class="timeline__event">한반도: 카데바에 의한 정부 전복, 이록에 의한 문명 파괴. 서울 밖은 철저한 무법지대.</div></div>
+        <div class="timeline__item timeline__item--now"><div class="timeline__year">2041년 현재</div><div class="timeline__event">서울 — 플렉서스의 초전도신경망으로 간신히 전력과 통신 유지 중. 인류의 마지막 생존권.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 2-2. SYSTEM (성흔 체계) ═══════════════ -->
+  <section id="system" class="section world">
+    <div class="section__header">
+      <span class="section__tag">SYSTEM CODEX — 관제 데이터</span>
+      <h2 class="section__title">성흔 체계</h2>
+      <p class="section__sub">이능의 근원. 극도의 스트레스가 새기는 문신. 그것이 성흔이다.</p>
+    </div>
+    <div class="world__grid">
+      <div class="system-panel">
+        <div class="system-panel__header"><span class="system-panel__icon">◈</span><span>성흔 (聖痕)</span></div>
+        <div class="system-panel__visual system-panel__visual--stigma" aria-hidden="true">
+          <div class="stigma-mark stigma-mark--outer"></div>
+          <div class="stigma-mark stigma-mark--inner"></div>
+          <div class="stigma-mark stigma-mark--core"></div>
+        </div>
+        <div class="system-panel__body">
+          <p>이능의 근원인 문신. 극도의 스트레스 상황에서 발현된다.</p>
+          <p>한번 새겨진 성흔은 지울 수 없으며, 각인된 자는 이능력자로 분류된다.</p>
+        </div>
+      </div>
+      <div class="system-panel">
+        <div class="system-panel__header"><span class="system-panel__icon">⬡</span><span>성흔력</span></div>
+        <div class="system-panel__visual system-panel__visual--power" aria-hidden="true">
+          <div class="stigma-wave stigma-wave--a"></div>
+          <div class="stigma-wave stigma-wave--b"></div>
+          <div class="stigma-wave stigma-wave--c"></div>
+          <div class="stigma-meter"><span></span></div>
+        </div>
+        <div class="system-panel__body">
+          <p>이능을 사용하기 위한 소모 자원.</p>
+          <p>고갈 시 능력 사용이 불가하며, 과도한 소모는 신체에 치명적 반동을 일으킨다.</p>
+        </div>
+      </div>
+      <div class="system-panel">
+        <div class="system-panel__header"><span class="system-panel__icon">✦</span><span>만개 (滿開)</span></div>
+        <div class="system-panel__visual system-panel__visual--bloom" aria-hidden="true">
+          <div class="bloom-ring bloom-ring--outer"></div>
+          <div class="bloom-ring bloom-ring--inner"></div>
+          <div class="bloom-burst"></div>
+        </div>
+        <div class="system-panel__body">
+          <p>극소수만이 각성한 필살기. 성흔의 완전한 해방 상태.</p>
+          <p>발동 시 성흔력의 대규모 소모를 수반한다.</p>
+        </div>
+      </div>
+      <div class="system-panel system-panel--wide">
+        <div class="system-panel__header"><span class="system-panel__icon">▲</span><span>위계 분류 체계</span></div>
+        <div class="threat-visual" aria-hidden="true">
+          <div class="threat-visual__radar"></div>
+          <div class="threat-visual__rings"></div>
+          <div class="threat-visual__pulse threat-visual__pulse--a"></div>
+          <div class="threat-visual__pulse threat-visual__pulse--b"></div>
+          <div class="threat-visual__label">CLASSIFICATION LADDER</div>
+        </div>
+        <div class="system-panel__body">
+          <div class="threat-scale">
+            <div class="threat-level threat-level--caution"><div class="threat-level__badge">주의급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:25%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>소규모 그룹에 대한 위협</div></div>
+            <div class="threat-level threat-level--threat"><div class="threat-level__badge">위협급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:50%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>지역구~도시 규모 위협</div></div>
+            <div class="threat-level threat-level--disaster"><div class="threat-level__badge">참사급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:75%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>대도시~국가 규모 위협</div></div>
+            <div class="threat-level threat-level--apocalypse"><div class="threat-level__badge">종말급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:100%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>대륙 규모 위협</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 3. FACTIONS ═══════════════ -->
   <section id="factions" class="section factions">
     <div class="section__header">
       <span class="section__tag">FACTION INTEL — 열람 허가</span>
@@ -211,7 +338,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════ 3. CHARACTERS ═══════════════ -->
+  <!-- ═══════════════ 4. CHARACTERS ═══════════════ -->
   <section id="characters" class="section characters">
     <div class="section__header">
       <span class="section__tag">CLASSIFIED DOSSIER — 기밀 열람</span>
@@ -227,92 +354,7 @@
     <div class="characters__grid" id="characters-grid"></div>
   </section>
 
-  <!-- ═══════════════ 4-1. LORE (세계관) ═══════════════ -->
-  <section id="lore" class="section lore">
-    <div class="section__header">
-      <span class="section__tag">WORLDVIEW — 코어 아카이브</span>
-      <h2 class="section__title">세계관</h2>
-      <p class="section__sub">서울은 여전히 버티고 있다. 하지만 그 밖은 지옥이 된 지 오래다.</p>
-    </div>
-    <div class="world__timeline">
-      <div class="timeline__header">세계 연표</div>
-      <div class="timeline">
-        <div class="timeline__item"><div class="timeline__year">2026</div><div class="timeline__event">극소수에게 성흔 발현. 이능력자의 존재가 확인됨.</div></div>
-        <div class="timeline__item"><div class="timeline__year">2036</div><div class="timeline__event">대재앙. 종말급 빌런들에 의해 세계 각국 정부 전복. 무정부 상태 돌입.</div></div>
-        <div class="timeline__item"><div class="timeline__year">2036~</div><div class="timeline__event">한반도: 카데바에 의한 정부 전복, 이록에 의한 문명 파괴. 서울 밖은 철저한 무법지대.</div></div>
-        <div class="timeline__item timeline__item--now"><div class="timeline__year">2041년 현재</div><div class="timeline__event">서울 — 플렉서스의 초전도신경망으로 간신히 전력과 통신 유지 중. 인류의 마지막 생존권.</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ 4-2. SYSTEM (성흔 체계) ═══════════════ -->
-  <section id="system" class="section world">
-    <div class="section__header">
-      <span class="section__tag">SYSTEM CODEX — 관제 데이터</span>
-      <h2 class="section__title">성흔 체계</h2>
-      <p class="section__sub">이능의 근원. 극도의 스트레스가 새기는 문신. 그것이 성흔이다.</p>
-    </div>
-    <div class="world__grid">
-      <div class="system-panel">
-        <div class="system-panel__header"><span class="system-panel__icon">◈</span><span>성흔 (聖痕)</span></div>
-        <div class="system-panel__visual system-panel__visual--stigma" aria-hidden="true">
-          <div class="stigma-mark stigma-mark--outer"></div>
-          <div class="stigma-mark stigma-mark--inner"></div>
-          <div class="stigma-mark stigma-mark--core"></div>
-        </div>
-        <div class="system-panel__body">
-          <p>이능의 근원인 문신. 극도의 스트레스 상황에서 발현된다.</p>
-          <p>한번 새겨진 성흔은 지울 수 없으며, 각인된 자는 이능력자로 분류된다.</p>
-        </div>
-      </div>
-      <div class="system-panel">
-        <div class="system-panel__header"><span class="system-panel__icon">⬡</span><span>성흔력</span></div>
-        <div class="system-panel__visual system-panel__visual--power" aria-hidden="true">
-          <div class="stigma-wave stigma-wave--a"></div>
-          <div class="stigma-wave stigma-wave--b"></div>
-          <div class="stigma-wave stigma-wave--c"></div>
-          <div class="stigma-meter"><span></span></div>
-        </div>
-        <div class="system-panel__body">
-          <p>이능을 사용하기 위한 소모 자원.</p>
-          <p>고갈 시 능력 사용이 불가하며, 과도한 소모는 신체에 치명적 반동을 일으킨다.</p>
-        </div>
-      </div>
-      <div class="system-panel">
-        <div class="system-panel__header"><span class="system-panel__icon">✦</span><span>만개 (滿開)</span></div>
-        <div class="system-panel__visual system-panel__visual--bloom" aria-hidden="true">
-          <div class="bloom-ring bloom-ring--outer"></div>
-          <div class="bloom-ring bloom-ring--inner"></div>
-          <div class="bloom-burst"></div>
-        </div>
-        <div class="system-panel__body">
-          <p>극소수만이 각성한 필살기. 성흔의 완전한 해방 상태.</p>
-          <p>발동 시 성흔력의 대규모 소모를 수반한다.</p>
-        </div>
-      </div>
-      <div class="system-panel system-panel--wide">
-        <div class="system-panel__header"><span class="system-panel__icon">▲</span><span>위계 분류 체계</span></div>
-        <div class="threat-visual" aria-hidden="true">
-          <div class="threat-visual__radar"></div>
-          <div class="threat-visual__rings"></div>
-          <div class="threat-visual__pulse threat-visual__pulse--a"></div>
-          <div class="threat-visual__pulse threat-visual__pulse--b"></div>
-          <div class="threat-visual__label">CLASSIFICATION LADDER</div>
-        </div>
-        <div class="system-panel__body">
-          <div class="threat-scale">
-            <div class="threat-level threat-level--caution"><div class="threat-level__badge">주의급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:25%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>소규모 그룹에 대한 위협</div></div>
-            <div class="threat-level threat-level--threat"><div class="threat-level__badge">위협급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:50%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>지역구~도시 규모 위협</div></div>
-            <div class="threat-level threat-level--disaster"><div class="threat-level__badge">참사급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:75%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>대도시~국가 규모 위협</div></div>
-            <div class="threat-level threat-level--apocalypse"><div class="threat-level__badge">종말급</div><div class="threat-level__bar"><div class="threat-level__fill" style="width:100%"></div></div><div class="threat-level__desc"><span class="threat-level__sigil"></span>대륙 규모 위협</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ 6. COMMUNITY ═══════════════ -->
+  <!-- ═══════════════ 5. COMMUNITY ═══════════════ -->
   <section id="community" class="section community">
     <div class="section__header">
       <span class="section__tag">종말넷 — TERMINAL ACCESS</span>
