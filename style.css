@@ -76,6 +76,121 @@ body {
 
 #particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.35; }
 
+/* ── Click Ability Effects ── */
+.click-stigma {
+  position:fixed; width:150px; height:150px; left:0; top:0; z-index:10020;
+  transform:translate(-50%, -50%);
+  pointer-events:none;
+  display:flex; align-items:center; justify-content:center;
+  color:rgba(245,232,190,0.88);
+  font-family:var(--font-mono);
+  animation:clickStigmaOut 0.9s ease-out forwards;
+}
+.click-stigma::before,
+.click-stigma::after {
+  content:''; position:absolute; inset:50%;
+  border:1px solid rgba(184,152,48,0.48);
+  transform:translate(-50%, -50%) rotate(45deg);
+  animation:clickStigmaRing 0.9s ease-out forwards;
+}
+.click-stigma::after {
+  border-color:rgba(120,190,170,0.26);
+  animation-delay:0.08s;
+}
+.click-stigma span {
+  position:relative; z-index:1;
+  font-size:1.1rem;
+  text-shadow:0 0 18px rgba(184,152,48,0.55);
+  animation:clickStigmaGlyph 0.9s ease-out forwards;
+}
+@keyframes clickStigmaRing {
+  0% { width:0; height:0; opacity:0.9; }
+  100% { width:140px; height:140px; opacity:0; }
+}
+@keyframes clickStigmaGlyph {
+  0% { opacity:0; transform:scale(0.5) rotate(0deg); }
+  28% { opacity:1; }
+  100% { opacity:0; transform:scale(1.25) rotate(45deg); }
+}
+@keyframes clickStigmaOut {
+  0%, 70% { opacity:1; }
+  100% { opacity:0; }
+}
+.ability-burst {
+  position:fixed; left:0; top:0; z-index:10030;
+  width:1px; height:1px; pointer-events:none;
+}
+.ability-burst::before {
+  content:''; position:absolute; left:0; top:0;
+  width:120px; height:120px;
+  transform:translate(-50%, -50%);
+  border:1px solid rgba(245,232,190,0.32);
+  border-radius:50%;
+  animation:abilityCore 0.8s ease-out forwards;
+}
+.ability-burst span {
+  position:absolute; left:0; top:0;
+  width:7px; height:7px;
+  transform:rotate(var(--rot)) translateX(0) rotate(calc(-1 * var(--rot)));
+  opacity:0;
+  background:rgba(245,232,190,0.8);
+  box-shadow:0 0 14px currentColor;
+  animation:abilityShard 0.82s ease-out forwards;
+  animation-delay:calc(var(--i) * 0.018s);
+}
+.ability-burst--hanidae { color:var(--hanidae); }
+.ability-burst--baekgolrim { color:var(--baekgolrim); }
+.ability-burst--nokwon { color:var(--nokwon); }
+.ability-burst--unaffiliated { color:var(--text-bright); }
+.ability-burst--plexus::before {
+  border-radius:0;
+  border-color:rgba(120,190,170,0.36);
+  box-shadow:0 0 0 22px rgba(120,190,170,0.05), 0 0 0 44px rgba(184,152,48,0.04);
+}
+.ability-burst--plexus span { width:36px; height:1px; background:currentColor; }
+.ability-burst--eun-haeseong span,
+.ability-burst--yomiya-shigure span { width:52px; height:1px; background:rgba(245,245,255,0.9); }
+.ability-burst--seo-jaeyoon span {
+  width:9px; height:6px;
+  border-radius:70% 30% 70% 30%;
+  background:#111;
+  border:1px solid rgba(120,120,160,0.7);
+}
+.ability-burst--yomiya-kaname span {
+  width:20px; height:3px;
+  background:linear-gradient(90deg, transparent, rgba(245,245,245,0.9), transparent);
+}
+.ability-burst--choi-geon span {
+  width:10px; height:10px;
+  background:transparent;
+  border:1px solid currentColor;
+  border-radius:1px;
+}
+.ability-burst--yoon-horang span {
+  width:34px; height:2px;
+  background:rgba(245,232,190,0.86);
+  box-shadow:0 6px 0 rgba(245,232,190,0.58), 0 -6px 0 rgba(245,232,190,0.58);
+}
+.ability-burst--cadeba span {
+  width:8px; height:24px;
+  background:linear-gradient(to bottom, rgba(245,232,190,0.95), rgba(168,40,40,0.25));
+  clip-path:polygon(50% 0, 100% 100%, 0 100%);
+}
+.ability-burst--lee-rok span {
+  width:42px; height:2px;
+  background:linear-gradient(90deg, transparent, rgba(60,180,88,0.9));
+  border-radius:999px;
+}
+@keyframes abilityCore {
+  0% { opacity:0.9; scale:0.25; rotate:0deg; }
+  100% { opacity:0; scale:1.25; rotate:90deg; }
+}
+@keyframes abilityShard {
+  0% { opacity:0; transform:rotate(var(--rot)) translateX(0) rotate(calc(-1 * var(--rot))) scale(0.4); }
+  20% { opacity:1; }
+  100% { opacity:0; transform:rotate(var(--rot)) translateX(var(--dist)) rotate(calc(-1 * var(--rot))) scale(1); }
+}
+
 /* ── Utilities ── */
 .text-warning { color: var(--warning); }
 .text-dim { color: var(--text-dim); }

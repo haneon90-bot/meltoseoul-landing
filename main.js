@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   setupSmoothScroll();
   initFactionCards();
+  initClickEffects();
 });
 
 function initIntroScreen() {
@@ -171,12 +172,49 @@ function initCharacters() {
       `;
       
       el.innerHTML = `<div class="char-card__portrait">${portraitHtml}<div class="char-card__classified">RESTRICTED</div><div class="char-card__access">ACCESS LEVEL 3</div></div><div class="char-card__body"><div class="char-card__meta">${c.aliases.join(' · ')}</div><div class="char-card__name">${c.name}</div><div class="char-card__ability">${c.ability}</div><div class="char-card__footer"><span class="char-card__threat threat--${c.threat}">${threatLevel}</span><span class="char-card__stigma">성흔: ${c.stigma}</span></div></div>`;
-      el.addEventListener('click', () => openDossier(c, factionKey));
+      el.addEventListener('click', (event) => {
+        createAbilityBurst(c.id, factionKey, event.clientX, event.clientY);
+        openDossier(c, factionKey);
+      });
       grid.appendChild(el);
     });
   }
   tabs.forEach(t => t.addEventListener('click', () => { tabs.forEach(x => x.classList.remove('active')); t.classList.add('active'); render(t.dataset.tab); }));
   render('hanidae');
+}
+
+function initClickEffects() {
+  document.addEventListener('click', (event) => {
+    if(event.target.closest('#intro-screen')) return;
+    createStigmaRipple(event.clientX, event.clientY);
+  });
+}
+
+function createStigmaRipple(x, y) {
+  const glyphs = ['◈', '✺', '⬢', '⎊', '⧨', '✦'];
+  const el = document.createElement('div');
+  el.className = 'click-stigma';
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+  el.innerHTML = `<span>${glyphs[Math.floor(Math.random() * glyphs.length)]}</span>`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 900);
+}
+
+function createAbilityBurst(id, faction, x, y) {
+  const el = document.createElement('div');
+  el.className = `ability-burst ability-burst--${faction} ability-burst--${id}`;
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+  for(let i = 0; i < 12; i++) {
+    const shard = document.createElement('span');
+    shard.style.setProperty('--i', i);
+    shard.style.setProperty('--rot', `${i * 30}deg`);
+    shard.style.setProperty('--dist', `${58 + (i % 4) * 12}px`);
+    el.appendChild(shard);
+  }
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1000);
 }
 
 function initCommunityBoard() {
