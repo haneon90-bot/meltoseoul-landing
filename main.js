@@ -5,16 +5,16 @@
 // 캐릭터 데이터 (Restored)
 const CHARACTERS = {
   hanidae: [
-    { id: 'plexus', name: '플렉서스', aliases: ['총장', '시스템 관제자'], threat: 'disaster', stigma: '불명', ability: '초전도신경망. 서울에 전력과 통신망을 공급하고 통제한다.', bloom: '불명', desc: '중앙관제실 시스템 관제자.', height: '약 190cm', nationality: '불명', quote: '다수의 생존을 위해 소수의 희생은 계산 범위 내에 있다.', img: '/plexus.jpg' },
-    { id: 'eun-haeseong', name: '은해성', aliases: ['A반 담임', '보건교사'], threat: 'threat', stigma: '상시 은폐', ability: '성흔력 코팅. 사물에 성흔력을 입혀 절단력을 극대화한다.', bloom: '쌍검 백야/심연 (결계 및 공간절단)', desc: '보건교사 겸 A반 담임.', height: '177cm', nationality: '한국/영국 혼혈', quote: '다친 곳 있으면 이리 와. 혼자 참지 말고.', img: '/eun-haeseong.jpg' },
+    { id: 'plexus', name: '플렉서스', aliases: ['한국이능대학 총장', '시스템 관제자'], threat: 'disaster', stigma: '불명', ability: '초전도신경망. 서울에 전력과 통신망을 공급하고 통제한다.', bloom: '불명', desc: '한국이능대학 총장. 중앙관제실 시스템 관제자.', height: '약 190cm', nationality: '불명', quote: '다수의 생존을 위해 소수의 희생은 계산 범위 내에 있다.', img: '/plexus.jpg' },
+    { id: 'eun-haeseong', name: '은해성', aliases: ['A반 담임', '보건교사'], threat: 'threat', stigma: '(?)', ability: '성흔력 코팅. 사물에 성흔력을 입혀 절단력을 극대화한다.', bloom: '(?)', desc: '보건교사 겸 A반 담임.', height: '177cm', nationality: '한국/영국 혼혈', quote: '다친 곳 있으면 이리 와. 혼자 참지 말고.', img: '/eun-haeseong.jpg' },
     { id: 'seo-jaeyoon', name: '서재윤', aliases: ['B반 담임'], threat: 'disaster', stigma: '왼쪽 어깨', ability: '흑접 조종. 검은 나비를 생성하여 총탄 궤도를 조작하거나 폭파시킨다.', bloom: '흑접만발 (대량 나비 돌격/폭발)', desc: 'B반 담임.', height: '181cm', nationality: '대한민국', quote: '씨발... 귀찮게. 안 뒤졌으면 대답해라.', img: '/seo-jaeyoon.jpg' },
     { id: 'ha-woonjin', name: '하운진', aliases: ['A반 학생'], threat: 'threat', stigma: '왼쪽 어깨 (연꽃무늬)', ability: '무공. 성흔력으로 무공을 구현하여 압도적인 체술을 발휘한다.', bloom: '만다라 폭발 (천수 환영 소환)', desc: 'A반 학생.', height: '179cm', nationality: '중국', quote: '내 뒤에 서 있어! 방해만 하지 말라고.' },
     { id: 'yomiya-kaname', name: '요미야 카나메', aliases: ['A반 학생'], threat: 'threat', stigma: '왼쪽 눈 (붕대로 은폐)', ability: '영혼절단. 죽음의 기운을 전기톱에 둘러 육체와 영혼을 분리한다.', bloom: '유골도문 (죽음의 영역, 영혼 약화)', desc: 'A반 학생.', height: '183cm', nationality: '일본', quote: '에~ 피 나올까요? 뼈 모양 이쁘겠다, 그쵸?' },
-    { id: 'choi-geon', name: '최건', aliases: ['B반 학생', '탈 쓴 은둔형 강자'], threat: 'disaster', stigma: '사타구니', ability: '무기물 활성화. 기계 테디베어를 전투체로 만든다.', bloom: '테디메기드 (기계 테디베어 소환)', desc: 'B반 학생.', height: '192cm', nationality: '대한민국', quote: '`[ 님 쫄? ㅋㅋ ]`' },
+    { id: 'choi-geon', name: '최건', aliases: ['B반 학생', '탈 쓴 은둔형 강자'], threat: 'disaster', stigma: '사타구니', ability: '즉석 메카조립. 주변 무기물과 부품을 조합해 전투용 메카를 즉석에서 조립한다.', bloom: '테디메기드 (기계 테디베어 소환)', desc: 'B반 학생.', height: '192cm', nationality: '대한민국', quote: '`[ 님 쫄? ㅋㅋ ]`' },
     { id: 'yoon-horang', name: '윤호랑', aliases: ['B반 학생'], threat: 'caution', stigma: '왼쪽 등 상단', ability: '수인화. 송곳니와 발톱을 포함한 수인 신체 강화.', bloom: '호쇄결박 (목의 쇠사슬로 속박)', desc: 'B반 학생.', height: '189cm', nationality: '대한민국', quote: '이 정도는 끄떡없어, 좋아♪' }
   ],
   baekgolrim: [
-    { id: 'cadeba', name: '카데바', aliases: ['백골림의 살아있는 신', '무소속 재앙'], threat: 'apocalypse', stigma: '전신을 덮은 검은 부족 문신', ability: '골격 증식. 자신의 뼈를 증식, 변형, 사출하여 무기로 쓴다.', bloom: '백골만상 (뼈다발 광역 돌출 및 폭격)', desc: '백골림이 신으로 떠받드는 한반도 종말의 원인. 본인은 그 집단에 속하지도, 관심을 두지도 않는다.', height: '198cm', nationality: '불명', quote: '비명 질러!!! 더 크게!!! 아하하하하!!!' }
+    { id: 'cadeba', name: '카데바', aliases: ['백골림의 살아있는 신', '무소속 재앙'], threat: 'apocalypse', stigma: '전신을 덮은 검은 부족 문신', ability: '골격 증식. 자신의 뼈를 증식, 변형, 사출하여 무기로 쓴다.', bloom: '백골만상 (뼈다발 광역 돌출 및 폭격)', desc: '백골림이 신으로 떠받드는 한반도 종말의 원인. 본인은 그 집단에 속하지도, 관심을 두지도 않는다.', height: '210cm', nationality: '불명', quote: '비명 질러!!! 더 크게!!! 아하하하하!!!' }
   ],
   nokwon: [
     { id: 'lee-rok', name: '이록', aliases: ['녹원 보스'], threat: 'disaster', stigma: '오른쪽 종아리', ability: '식생 조종. 자신의 몸이나 주변의 식물을 거대한 촉수처럼 부린다.', bloom: '녹식융해 (초광역 식생 침식, 포자와 맹독)', desc: '녹원의 보스.', height: '173cm', nationality: '불명', quote: '노려보는 얼굴도 좋네. 너무 애쓰지 마.' }
@@ -23,15 +23,6 @@ const CHARACTERS = {
     { id: 'yomiya-shigure', name: '요미야 시구레', aliases: ['청부업자', '무소속'], threat: 'disaster', stigma: '없음 (이레귤러)', ability: '일반인을 초월한 압도적 피지컬. 주변 잡동사니를 치명적 살상 무기로 사용.', bloom: '없음', desc: '소속 불명의 청부업자.', height: '187cm', nationality: '일본', quote: '귀찮네. 한 번에 끝내준다.' }
   ]
 };
-
-const CHAT_MESSAGES = [
-  { sender: '서재윤', status: '한이대', time: '03:14:02', text: 'A반, 상황 보고해라. 백골림 쓰레기들 잔당은 처리했냐?' },
-  { sender: '하운진', status: '한이대', time: '03:14:15', text: '시끄러, 묻기도 전에 다 쓸어버렸어. 그쪽 반 녀석들 중에 다친 놈은 없고? ...도와달라는 거 아니니까 찌그러져 있어!' },
-  { sender: '요미야 카나메', status: '한이대', time: '03:14:40', text: '다들 뼈 구경 하실래요? 예쁜 모양으로 잘라뒀는데~ 에헤헤.' },
-  { sender: '은해성', status: '한이대', time: '03:15:10', text: '카나메, 장난치지 말고 귀환해라. 부상자 있으면 의료반으로 보내고.' },
-  { sender: 'SYSTEM', status: 'system', time: '03:17:00', text: '[경고] 마포구 외곽에서 클래스 4(참사급) 이상 에너지 반응 감지. 녹원 세력 접근 중.' },
-  { sender: '이록', status: '녹원', time: '03:17:22', text: '어라, 벌써 들켰네. 귀여운 아이들이 마중 나오려나?' }
-];
 
 const COMMUNITY_POSTS = [
   { category: 'intel', time: '02:40', title: '인천 구역 진입 불가', body: '식생 침식 속도가 미쳤음. 어제까지만 해도 멀쩡하던 도로가 완전 밀림이 됐다. 이록 수하들인 듯.', footer: '조회 1,241 | 댓글 44' },
@@ -46,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initIntroScreen();
   initParticles();
   initCharacters();
-  initChatMessages();
   initCommunityBoard();
   initInteractiveTabs();
   initStigmaGenerator();
@@ -187,26 +177,6 @@ function initCharacters() {
   }
   tabs.forEach(t => t.addEventListener('click', () => { tabs.forEach(x => x.classList.remove('active')); t.classList.add('active'); render(t.dataset.tab); }));
   render('hanidae');
-}
-
-function initChatMessages() {
-  const container = document.getElementById('chat-messages');
-  if(!container) return;
-  const obs = new IntersectionObserver(e => {
-    if(e[0].isIntersecting) {
-      obs.disconnect(); let d = 0;
-      CHAT_MESSAGES.forEach((msg, i) => {
-        setTimeout(() => {
-          const m = document.createElement('div');
-          let f = 'system'; if(msg.status==='한이대') f='hanidae'; else if(msg.status==='백골림') f='baekgolrim'; else if(msg.status==='녹원') f='nokwon';
-          m.className = `chat-msg chat-msg--${f}`;
-          m.innerHTML = `<div class="chat-msg__sender"><span class="name">${msg.sender}</span><span class="time">${msg.time}</span></div><div class="chat-msg__text">${msg.text}</div>`;
-          container.appendChild(m); container.scrollTop = container.scrollHeight;
-        }, d); d += 1000 + Math.random() * 1500;
-      });
-    }
-  }, { threshold: 0.5 });
-  obs.observe(document.querySelector('.chat'));
 }
 
 function initCommunityBoard() {

@@ -749,27 +749,6 @@ body {
 .timeline__event { font-size:0.84rem; color:var(--text-secondary); line-height:1.7; padding-left:20px; }
 .timeline__item--now .timeline__event { color:var(--text-primary); }
 
-/* ═══════════════ 5. CHAT ═══════════════ */
-.chat__container { max-width:580px; margin:0 auto; }
-.chat__window { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; }
-.chat__topbar { display:flex; align-items:center; gap:8px; padding:11px 18px; border-bottom:1px solid var(--border); font-family:var(--font-mono); font-size:0.65rem; letter-spacing:0.15em; color:var(--text-dim); }
-.chat__time { margin-left:auto; }
-.chat__messages { padding:18px; min-height:320px; max-height:440px; overflow-y:auto; display:flex; flex-direction:column; gap:14px; scrollbar-width:thin; scrollbar-color:#222 transparent; }
-.chat-msg { display:flex; flex-direction:column; gap:3px; animation:msgAppear 0.4s ease-out; }
-@keyframes msgAppear { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-.chat-msg__sender { font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.1em; display:flex; align-items:center; gap:8px; }
-.chat-msg__sender .name { font-weight:500; }
-.chat-msg__sender .time { color:var(--text-dim); font-size:0.55rem; }
-.chat-msg--hanidae .chat-msg__sender .name { color:var(--hanidae); }
-.chat-msg--baekgolrim .chat-msg__sender .name { color:var(--baekgolrim); }
-.chat-msg--nokwon .chat-msg__sender .name { color:var(--nokwon); }
-.chat-msg--system .chat-msg__sender .name { color:var(--text-dim); }
-.chat-msg__text { font-size:0.84rem; color:var(--text-primary); background:rgba(255,255,255,0.02); padding:9px 13px; border-radius:2px 6px 6px 6px; border-left:2px solid var(--border); line-height:1.7; }
-.chat-msg--hanidae .chat-msg__text { border-left-color:rgba(184,152,48,0.25); }
-.chat-msg--baekgolrim .chat-msg__text { border-left-color:rgba(168,40,40,0.25); }
-.chat-msg--nokwon .chat-msg__text { border-left-color:rgba(40,120,58,0.25); }
-.chat-msg--system .chat-msg__text { border-left-color:rgba(42,74,112,0.25); font-family:var(--font-mono); font-size:0.7rem; color:var(--text-dim); background:rgba(42,74,112,0.04); }
-
 /* ═══════════════ 6. COMMUNITY ═══════════════ */
 .community__board { display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; }
 .board-post { padding:18px 22px; border-bottom:1px solid var(--border); transition:var(--transition); cursor:default; }
