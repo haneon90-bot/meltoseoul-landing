@@ -509,27 +509,27 @@ function initHanidaeSim() {
   };
 
   const script = {
-    start: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.normal, speaker: '관제 시스템', text: '미등록 성흔 반응 감지. 신입 등록 절차 중단. 임시 위계 판정: 측정 불가.', next: 'alarmHa', entryEffect: 'glitch' },
-    alarmHa: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '하운진', text: '야. 너 방금 뭐 했어? 성흔 등록도 안 끝났는데 관제실 경고가 먼저 뜨는 신입은 처음 보거든.', next: 'alarmChoice', entryEffect: 'signal' },
-    alarmChoice: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '하운진', text: '대답 잘해. 지금 네 첫마디가 배정표에 바로 찍힌다. 뭐라고 할래?', choices: [
+    start: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.normal, speaker: '관제 시스템', text: '신입생 등록 절차 진행 중. 미등록 성흔 반응 감지. 등록 중단. 임시 위계 판정: 측정 불가.', next: 'alarmHa', entryEffect: 'alarm', alert: 'siren' },
+    alarmHa: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.angry, speaker: '하운진', text: '너, 방금까지 신입생 등록 중이었지? 네 성흔 반응 때문에 관제실이 멈췄어. ...방금 뭐 했어?', next: 'alarmChoice', entryEffect: 'alarm', alert: 'siren' },
+    alarmChoice: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.angry, speaker: '하운진', text: '여긴 한이대 신입 배정 등록대야. 대답 잘해. 지금 네 첫마디가 배정표에 바로 찍힌다.', alert: 'siren', choices: [
       { label: '솔직히 성흔이 아프다고 말한다', next: 'alarmHonest', impact: { trust: 2, stability: 2 }, effect: 'good' },
       { label: '아무 일도 아니라고 숨긴다', next: 'alarmHide', impact: { trust: -1, risk: 2, stability: -1 }, effect: 'glitch' },
       { label: '관제 화면을 한 번 더 본다', next: 'alarmLook', impact: { risk: 3, stability: -1 }, effect: 'cadeba' },
       { label: '하운진 뒤로 바로 숨는다', next: 'alarmBehindHa', impact: { trust: 1, aclass: 1 }, effect: 'soft' }
     ] },
-    alarmHonest: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.shy, speaker: '하운진', text: '...그래. 아프면 아프다고 말하는 게 맞아. 이상하게 정상적인 선택을 해서 더 당황스럽네.', next: 'eunEmergency', entryEffect: 'bloom' },
-    alarmHide: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '관제 시스템', text: '거짓 보고 감지. 심박 상승, 성흔력 누출 증가. 임시 태그: 은폐 성향.', next: 'haHideScold', entryEffect: 'glitch' },
-    haHideScold: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '하운진', text: '들켰잖아. 여기서 거짓말하면 사람이 아니라 숫자가 먼저 널 고발해. 보건 구역으로 가.', next: 'eunEmergency' },
-    alarmLook: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.embarrassed, speaker: '관제 시스템', text: '비인가 열람. 외곽 CCTV 잔상 동기화. 카데바 관측 로그 접근 차단 실패.', next: 'haLookPanic', entryEffect: 'cadeba' },
-    haLookPanic: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '하운진', text: '눈 돌려! 첫날부터 카데바 로그를 왜 봐? 너 지금 입학이 아니라 격리 코스 탈 뻔했어.', next: 'seoEmergency', entryEffect: 'glitch' },
-    alarmBehindHa: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.embarrassed, speaker: '하운진', text: '내 뒤에 서 있으랬지, 시작부터 숨으랬냐? ...그래도 화면을 더 안 본 건 잘했어.', next: 'haShieldChoice' },
-    haShieldChoice: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.embarrassed, speaker: '하운진', text: '관제실이 널 계속 보고 있어. 지금은 움직임 하나하나가 평가야. 다음 행동은?', choices: [
+    alarmHonest: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.shy, speaker: '하운진', text: '...그래. 아프면 아프다고 말하는 게 맞아. 이상하게 정상적인 선택을 해서 더 당황스럽네.', next: 'eunEmergency', entryEffect: 'bloom' },
+    alarmHide: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.angry, speaker: '관제 시스템', text: '거짓 보고 감지. 심박 상승, 성흔력 누출 증가. 임시 태그: 은폐 성향.', next: 'haHideScold', entryEffect: 'glitch', alert: 'siren' },
+    haHideScold: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.angry, speaker: '하운진', text: '들켰잖아. 여기서 거짓말하면 사람이 아니라 숫자가 먼저 널 고발해. 보건 구역으로 가.', next: 'eunEmergency' },
+    alarmLook: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.embarrassed, speaker: '관제 시스템', text: '비인가 열람. 외곽 CCTV 잔상 동기화. 카데바 관측 로그 접근 차단 실패.', next: 'haLookPanic', entryEffect: 'cadeba', alert: 'siren' },
+    haLookPanic: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.angry, speaker: '하운진', text: '눈 돌려! 첫날부터 카데바 로그를 왜 봐? 너 지금 입학이 아니라 격리 코스 탈 뻔했어.', next: 'seoEmergency', entryEffect: 'glitch' },
+    alarmBehindHa: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.embarrassed, speaker: '하운진', text: '내 뒤에 서 있으랬지, 시작부터 숨으랬냐? ...그래도 화면을 더 안 본 건 잘했어.', next: 'haShieldChoice' },
+    haShieldChoice: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.embarrassed, speaker: '하운진', text: '관제실이 널 계속 보고 있어. 지금은 움직임 하나하나가 평가야. 다음 행동은?', choices: [
       { label: '하운진 지시에 따른다', next: 'eunEmergency', impact: { trust: 1, stability: 1, aclass: 1 }, effect: 'good' },
       { label: '괜찮은 척 웃어넘긴다', next: 'seoEmergency', impact: { risk: 1, bclass: 1 }, effect: 'danger' },
       { label: '카데바라는 이름을 작게 중얼거린다', next: 'cadebaNameTrigger', impact: { risk: 3, stability: -1 }, effect: 'cadeba' }
     ] },
-    cadebaNameTrigger: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.embarrassed, speaker: '관제 시스템', text: '금칙어 반응. 외곽 감시망 잔향 재접속. 임시 격리 권고.', next: 'haCadebaName', entryEffect: 'cadeba' },
-    haCadebaName: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '하운진', text: '그 이름을 왜 지금 말해? 신입, 농담이면 진짜 감각 최악이고 진심이면 더 최악이야.', next: 'seoEmergency' },
+    cadebaNameTrigger: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.embarrassed, speaker: '관제 시스템', text: '금칙어 반응. 외곽 감시망 잔향 재접속. 임시 격리 권고.', next: 'haCadebaName', entryEffect: 'cadeba' },
+    haCadebaName: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.angry, speaker: '하운진', text: '그 이름을 왜 지금 말해? 신입, 농담이면 진짜 감각 최악이고 진심이면 더 최악이야.', next: 'seoEmergency' },
     eunEmergency: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.shy, guest: cast.eun, guestName: '은해성', speaker: '은해성', text: '등록 중 성흔 반응이 튄 분이 이쪽이군요. 괜찮습니다. 숨 쉬세요. 제가 먼저 확인해드릴게요.', next: 'eunEmergencyChoice', entryEffect: 'good' },
     eunEmergencyChoice: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.shy, guest: cast.eun, guestName: '은해성', speaker: '은해성', text: '통증, 환청, 시야 흔들림 중 하나라도 있으면 바로 말씀해주세요. 배정도 중요하지만 몸이 먼저예요.', choices: [
       { label: '통증 위치를 정확히 말한다', next: 'eunHonest', impact: { trust: 2, stability: 2 }, effect: 'good' },
@@ -694,7 +694,7 @@ function initHanidaeSim() {
   const history = [];
   let vnAudioContext;
   let stats = { trust: 1, risk: 0, stability: 1, aclass: 0, bclass: 0 };
-  const vnEffectClasses = ['vn-effect--soft', 'vn-effect--good', 'vn-effect--danger', 'vn-effect--signal', 'vn-effect--glitch', 'vn-effect--bloom', 'vn-effect--slash', 'vn-effect--impact', 'vn-effect--cadeba'];
+  const vnEffectClasses = ['vn-effect--soft', 'vn-effect--good', 'vn-effect--danger', 'vn-effect--signal', 'vn-effect--glitch', 'vn-effect--bloom', 'vn-effect--slash', 'vn-effect--impact', 'vn-effect--cadeba', 'vn-effect--alarm'];
   const statEls = {
     trust: { fill: root.querySelector('[data-stat-fill="trust"]'), value: root.querySelector('[data-stat-value="trust"]') },
     risk: { fill: root.querySelector('[data-stat-fill="risk"]'), value: root.querySelector('[data-stat-value="risk"]') },
@@ -756,6 +756,12 @@ function initHanidaeSim() {
       if(tone === 'danger') {
         makeNoise(0.24, 0.2);
         makeTone(520, 'sawtooth', 0.18, 0.16, 170);
+        return;
+      }
+      if(tone === 'alarm') {
+        makeNoise(0.26, 0.22);
+        makeTone(740, 'sawtooth', 0.16, 0.14, 520);
+        setTimeout(() => makeTone(960, 'square', 0.14, 0.13, 620), 115);
         return;
       }
       if(tone === 'glitch' || tone === 'signal') {
@@ -896,6 +902,7 @@ function initHanidaeSim() {
     root.dataset.face = scene.face === ha.normal ? 'normal' : 'variant';
     root.dataset.speaker = scene.speaker === '하운진' ? 'ha' : 'guest';
     root.dataset.guest = scene.guestName || 'none';
+    root.dataset.alert = scene.alert || 'none';
     bg.src = scene.bg;
     sprite.src = scene.face;
     location.textContent = scene.loc;
@@ -942,9 +949,11 @@ function initHanidaeSim() {
   function advanceScene() {
     const scene = script[index];
     if(scene.choices) return;
-    playVnClick('soft');
+    const nextIndex = scene.next ?? 'start';
+    const nextScene = script[nextIndex];
+    playVnClick(nextScene?.entryEffect || 'soft');
     history.push(snapshot());
-    index = scene.next ?? 'start';
+    index = nextIndex;
     render();
   }
 

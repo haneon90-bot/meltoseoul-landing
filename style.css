@@ -555,7 +555,8 @@ body {
 .hero-vn.vn-effect--bloom .hero-vn__stage::after,
 .hero-vn.vn-effect--slash .hero-vn__stage::after,
 .hero-vn.vn-effect--impact .hero-vn__stage::after,
-.hero-vn.vn-effect--cadeba .hero-vn__stage::after {
+.hero-vn.vn-effect--cadeba .hero-vn__stage::after,
+.hero-vn.vn-effect--alarm .hero-vn__stage::after {
   content:'';
   position:absolute;
   inset:0;
@@ -624,6 +625,36 @@ body {
     repeating-linear-gradient(0deg, rgba(198,63,53,0.16) 0 1px, transparent 1px 6px);
   animation:vnCadebaPulse 0.68s ease-out;
 }
+.hero-vn.vn-effect--alarm .hero-vn__stage {
+  animation:vnAlarmJolt 0.34s ease-out;
+}
+.hero-vn.vn-effect--alarm .hero-vn__stage::after {
+  background:
+    linear-gradient(90deg, rgba(198,63,53,0.62), transparent 24%, rgba(198,63,53,0.28), transparent 76%, rgba(198,63,53,0.5)),
+    repeating-linear-gradient(0deg, rgba(255,52,40,0.2) 0 2px, transparent 2px 9px),
+    radial-gradient(circle at 50% 36%, rgba(255,214,208,0.2), transparent 36%);
+  mix-blend-mode:screen;
+  animation:vnAlarmFlash 0.68s ease-out;
+}
+.hero-vn[data-alert="siren"] .hero-vn__notice {
+  background:linear-gradient(90deg, rgba(198,63,53,0.26), rgba(28,34,40,0.96) 44%, rgba(198,63,53,0.18));
+  border-bottom-color:rgba(239,97,82,0.4);
+}
+.hero-vn[data-alert="siren"] .hero-vn__notice strong {
+  color:#ffd6d0;
+}
+.hero-vn[data-alert="siren"] .hero-vn__stage::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:5;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg, rgba(198,63,53,0.28), transparent 32%, rgba(198,63,53,0.2)),
+    repeating-linear-gradient(0deg, rgba(255,60,44,0.12) 0 2px, transparent 2px 10px);
+  mix-blend-mode:screen;
+  animation:vnSirenFilter 1.05s ease-in-out infinite;
+}
 @keyframes vnChoiceFlash {
   from { opacity:0; transform:scaleX(0.7); }
   30% { opacity:1; }
@@ -681,6 +712,23 @@ body {
   from { opacity:0; transform:scale(0.92); }
   35% { opacity:1; }
   to { opacity:0; transform:scale(1.1); }
+}
+@keyframes vnAlarmJolt {
+  0%, 100% { transform:translate(0,0); filter:none; }
+  20% { transform:translate(-6px,1px); filter:saturate(1.2) contrast(1.15); }
+  46% { transform:translate(5px,-2px); filter:saturate(1.35) contrast(1.24); }
+  72% { transform:translate(-2px,1px); filter:saturate(1.08) contrast(1.1); }
+}
+@keyframes vnAlarmFlash {
+  from { opacity:0; transform:translateX(-24%) scaleX(0.88); }
+  28% { opacity:0.95; }
+  58% { opacity:0.6; transform:translateX(10%) scaleX(1.03); }
+  to { opacity:0; transform:translateX(24%) scaleX(1.12); }
+}
+@keyframes vnSirenFilter {
+  0%, 100% { opacity:0.18; }
+  45% { opacity:0.52; }
+  62% { opacity:0.28; }
 }
 @keyframes vnReportIn {
   from { opacity:0; transform:translateY(8px); }
