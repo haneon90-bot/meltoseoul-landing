@@ -3034,3 +3034,144 @@ body::before {
     max-height:76%;
   }
 }
+
+/* Typography refresh: 종말넷 게시판을 더 선명하고 크게 보이게 */
+:root {
+  --font-display:'Black Han Sans', 'Noto Sans KR', sans-serif;
+  --font-sans:'IBM Plex Sans KR', 'Noto Sans KR', -apple-system, sans-serif;
+}
+
+body {
+  font-weight:500;
+  color:#d7d4ca;
+}
+
+.intro__title,
+.hero__title,
+.section__title,
+.final-cta__title {
+  font-family:var(--font-display);
+  font-weight:400;
+  letter-spacing:0;
+  line-height:1.08;
+  text-shadow:0 4px 0 rgba(0,0,0,0.55), 0 0 28px rgba(142,184,255,0.14);
+}
+
+.intro__title {
+  font-size:5.8rem;
+}
+
+.hero__title {
+  max-width:980px;
+  font-size:4.1rem;
+  color:#fff2bf;
+}
+
+.section__title {
+  font-size:2.15rem;
+  color:#fff0c2;
+}
+
+.final-cta__title {
+  font-size:2.75rem;
+  color:#fff0c2;
+}
+
+.hero__brand,
+.section__tag,
+.hero__post-meta,
+.hero__footage-bar,
+.hero-breaking__top,
+.timeline__header,
+.system-panel__header,
+.inter-panel__header,
+.board-post__category,
+.char-card__bbs,
+.hero-vn__header,
+.mobile-nav__item .label {
+  font-weight:700;
+  letter-spacing:0;
+}
+
+.board-post__title,
+.faction-card__name,
+.char-card__name,
+.dossier__name,
+.stigma-result__name,
+.ft-result__faction {
+  font-family:var(--font-sans);
+  font-weight:700;
+  letter-spacing:0;
+  color:#fff7e6;
+}
+
+.board-post__title {
+  font-size:1rem;
+  line-height:1.45;
+}
+
+.faction-card__name {
+  font-size:1.55rem;
+}
+
+.char-card__name {
+  font-size:1.25rem;
+}
+
+.dossier__name {
+  font-size:2rem;
+}
+
+.faction-card__desc,
+.char-card__ability,
+.timeline__event,
+.system-panel__body,
+.board-post__body,
+.hero-vn__line,
+.final-cta__sub {
+  font-weight:500;
+  color:#ddd8ca;
+}
+
+.system-panel__body strong,
+.board-post__body strong,
+.char-card__ability strong {
+  font-weight:700;
+  color:#fff2bf;
+}
+
+.btn,
+.char-tab,
+.inter-tab,
+.hero-vn__choice,
+.stigma-draw-btn,
+.faction-test__option {
+  font-weight:700;
+  letter-spacing:0;
+}
+
+@media (max-width:768px) {
+  .intro__title {
+    font-size:3.7rem;
+  }
+
+  .hero__title {
+    font-size:2.55rem;
+  }
+
+  .section__title {
+    font-size:1.7rem;
+  }
+
+  .final-cta__title {
+    font-size:2rem;
+  }
+
+  .board-post__title {
+    font-size:0.95rem;
+  }
+
+  .char-card__name {
+    font-size:1.1rem;
+  }
+}
