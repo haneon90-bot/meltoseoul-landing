@@ -3257,6 +3257,27 @@ body {
   letter-spacing:0;
 }
 
+.system-panel__image {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  filter:saturate(1.06) contrast(1.04);
+  transition:transform 0.35s ease, filter 0.35s ease;
+}
+
+.system-panel:hover .system-panel__image {
+  transform:scale(1.035);
+  filter:saturate(1.16) contrast(1.08);
+}
+
+.system-panel__visual::after {
+  z-index:1;
+  pointer-events:none;
+}
+
 @media (max-width:768px) {
   .intro__title {
     font-size:3.7rem;
