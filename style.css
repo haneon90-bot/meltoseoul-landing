@@ -3005,12 +3005,12 @@ body::before {
 
   .hero-vn__sprite,
   .hero-vn__guest {
-    max-height:78%;
+    max-height:82%;
   }
 
   .hero-vn__guest {
     right:-5%;
-    max-height:76%;
+    max-height:80%;
   }
 
   .hero-vn__dialogue {
@@ -3031,7 +3031,7 @@ body::before {
 
   .hero-vn__sprite,
   .hero-vn__guest {
-    max-height:76%;
+    max-height:80%;
   }
 }
 
