@@ -509,34 +509,41 @@ function initHanidaeSim() {
   };
 
   const script = {
-    start: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.normal, speaker: '하운진', text: '...신입? 거기 멀뚱히 서 있지 말고 따라와. 여긴 구경하러 오는 곳 아니거든.', next: 'campusChoice' },
-    campusChoice: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.normal, speaker: '하운진', text: '입구부터 긴장한 얼굴이네. 좋아, 첫 반응부터 보자. 한이대 정문 앞에서 넌 뭘 할 건데?', choices: [
-      { label: '규정부터 듣겠다고 한다', next: 'campusRules', impact: { trust: 1, stability: 1 }, effect: 'good' },
-      { label: '감시 카메라에 손을 흔든다', next: 'campusWave', impact: { risk: 1, bclass: 1 }, effect: 'signal' },
-      { label: '성흔 반응부터 확인한다', next: 'campusStigma', impact: { aclass: 1, stability: 1 }, effect: 'bloom' }
+    start: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.normal, speaker: '관제 시스템', text: '미등록 성흔 반응 감지. 신입 등록 절차 중단. 임시 위계 판정: 측정 불가.', next: 'alarmHa', entryEffect: 'glitch' },
+    alarmHa: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '하운진', text: '야. 너 방금 뭐 했어? 성흔 등록도 안 끝났는데 관제실 경고가 먼저 뜨는 신입은 처음 보거든.', next: 'alarmChoice', entryEffect: 'signal' },
+    alarmChoice: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '하운진', text: '대답 잘해. 지금 네 첫마디가 배정표에 바로 찍힌다. 뭐라고 할래?', choices: [
+      { label: '솔직히 성흔이 아프다고 말한다', next: 'alarmHonest', impact: { trust: 2, stability: 2 }, effect: 'good' },
+      { label: '아무 일도 아니라고 숨긴다', next: 'alarmHide', impact: { trust: -1, risk: 2, stability: -1 }, effect: 'glitch' },
+      { label: '관제 화면을 한 번 더 본다', next: 'alarmLook', impact: { risk: 3, stability: -1 }, effect: 'cadeba' },
+      { label: '하운진 뒤로 바로 숨는다', next: 'alarmBehindHa', impact: { trust: 1, aclass: 1 }, effect: 'soft' }
     ] },
-    campusRules: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.normal, speaker: '하운진', text: '의외로 정상적인 대답이네. 여기 규정은 귀찮으라고 있는 게 아니라, 살아서 다음날 보려고 있는 거야.', next: 'classroom' },
-    campusWave: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.embarrassed, speaker: '하운진', text: '야, 카메라에 손 흔들지 마. 플렉서스가 봤으면 이미 네 행동 패턴에 “관종 가능성 있음” 붙였을걸.', next: 'classroom', entryEffect: 'signal' },
-    campusStigma: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.shy, speaker: '하운진', text: '성흔부터 확인하는 건 나쁘지 않아. 근데 멋있다고 만지작거리진 마. 반응 튀면 네 몸이 먼저 대가 치르니까.', next: 'classroom', entryEffect: 'bloom' },
-    classroom: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, speaker: '하운진', text: '여기가 A반. 수업은 수업이고, 실전은 실전이야. 졸면 다치고, 멋대로 나서면 더 다쳐.', next: 'classroomChoice' },
-    classroomChoice: { bg: scenes.classroom, loc: 'A반 교실', face: ha.normal, speaker: '하운진', text: '교실이라고 안심하지 마. 여기선 질문 하나로도 누구랑 엮일지 갈린다. 뭘 물어볼래?', choices: [
-      { label: 'A반은 뭐가 다르냐고 묻는다', next: 'classroomAclass', impact: { aclass: 1, trust: 1 }, effect: 'soft' },
-      { label: 'B반은 더 위험하냐고 묻는다', next: 'classroomBclass', impact: { bclass: 1, risk: 1 }, effect: 'signal' },
-      { label: '요미야 카나메 자리가 어디냐고 묻는다', next: 'classroomKanameSeat', impact: { aclass: 1, risk: 2 }, effect: 'slash' }
+    alarmHonest: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.shy, speaker: '하운진', text: '...그래. 아프면 아프다고 말하는 게 맞아. 이상하게 정상적인 선택을 해서 더 당황스럽네.', next: 'eunEmergency', entryEffect: 'bloom' },
+    alarmHide: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '관제 시스템', text: '거짓 보고 감지. 심박 상승, 성흔력 누출 증가. 임시 태그: 은폐 성향.', next: 'haHideScold', entryEffect: 'glitch' },
+    haHideScold: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '하운진', text: '들켰잖아. 여기서 거짓말하면 사람이 아니라 숫자가 먼저 널 고발해. 보건 구역으로 가.', next: 'eunEmergency' },
+    alarmLook: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.embarrassed, speaker: '관제 시스템', text: '비인가 열람. 외곽 CCTV 잔상 동기화. 카데바 관측 로그 접근 차단 실패.', next: 'haLookPanic', entryEffect: 'cadeba' },
+    haLookPanic: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '하운진', text: '눈 돌려! 첫날부터 카데바 로그를 왜 봐? 너 지금 입학이 아니라 격리 코스 탈 뻔했어.', next: 'seoEmergency', entryEffect: 'glitch' },
+    alarmBehindHa: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.embarrassed, speaker: '하운진', text: '내 뒤에 서 있으랬지, 시작부터 숨으랬냐? ...그래도 화면을 더 안 본 건 잘했어.', next: 'haShieldChoice' },
+    haShieldChoice: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.embarrassed, speaker: '하운진', text: '관제실이 널 계속 보고 있어. 지금은 움직임 하나하나가 평가야. 다음 행동은?', choices: [
+      { label: '하운진 지시에 따른다', next: 'eunEmergency', impact: { trust: 1, stability: 1, aclass: 1 }, effect: 'good' },
+      { label: '괜찮은 척 웃어넘긴다', next: 'seoEmergency', impact: { risk: 1, bclass: 1 }, effect: 'danger' },
+      { label: '카데바라는 이름을 작게 중얼거린다', next: 'cadebaNameTrigger', impact: { risk: 3, stability: -1 }, effect: 'cadeba' }
     ] },
-    classroomAclass: { bg: scenes.classroom, loc: 'A반 교실', face: ha.normal, speaker: '하운진', text: 'A반은 통제가 먼저야. 사고 치지 말라는 뜻이 아니라, 사고 쳐도 돌아올 선을 알고 치라는 뜻이지.', next: 'control' },
-    classroomBclass: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, speaker: '하운진', text: 'B반? 위험하지. 근데 이상하게 정은 또 많아. 문제는 그 정이 팔굽혀펴기랑 대련으로 표현된다는 거고.', next: 'control' },
-    classroomKanameSeat: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, speaker: '하운진', text: '첫 질문이 그거야? 요미야 쪽으로 먼저 시선 돌리는 신입은 보통 오래 못 간다. 일단 관제실부터 가.', next: 'control', entryEffect: 'slash' },
-    control: { bg: scenes.control, loc: '중앙관제실', face: ha.normal, speaker: '하운진', text: '저쪽이 중앙관제실. 플렉서스가 서울 전력, 방벽, 감시망을 전부 물고 있어. 기분 나쁠 정도로 정확하지.', next: 'controlChoice', entryEffect: 'signal' },
-    controlChoice: { bg: scenes.control, loc: '중앙관제실', face: ha.normal, speaker: '하운진', text: '관제실 앞에서는 말조심해. 농담 같지? 여기선 진짜로 로그 남아. 그래도 하나만 물어봐.', choices: [
-      { label: '감시망이 어디까지 보냐고 묻는다', next: 'controlRange', impact: { trust: 1, stability: 1 }, effect: 'signal' },
-      { label: '카데바 영상도 여기서 보냐고 묻는다', next: 'controlCadeba', impact: { risk: 2, stability: -1 }, effect: 'cadeba' },
-      { label: '몰래 단말기를 건드린다', next: 'controlTouch', impact: { risk: 2, trust: -1 }, effect: 'glitch' }
+    cadebaNameTrigger: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.embarrassed, speaker: '관제 시스템', text: '금칙어 반응. 외곽 감시망 잔향 재접속. 임시 격리 권고.', next: 'haCadebaName', entryEffect: 'cadeba' },
+    haCadebaName: { bg: scenes.control, loc: '중앙관제실 / 신입 등록대', face: ha.angry, speaker: '하운진', text: '그 이름을 왜 지금 말해? 신입, 농담이면 진짜 감각 최악이고 진심이면 더 최악이야.', next: 'seoEmergency' },
+    eunEmergency: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.shy, guest: cast.eun, guestName: '은해성', speaker: '은해성', text: '등록 중 성흔 반응이 튄 분이 이쪽이군요. 괜찮습니다. 숨 쉬세요. 제가 먼저 확인해드릴게요.', next: 'eunEmergencyChoice', entryEffect: 'good' },
+    eunEmergencyChoice: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.shy, guest: cast.eun, guestName: '은해성', speaker: '은해성', text: '통증, 환청, 시야 흔들림 중 하나라도 있으면 바로 말씀해주세요. 배정도 중요하지만 몸이 먼저예요.', choices: [
+      { label: '통증 위치를 정확히 말한다', next: 'eunHonest', impact: { trust: 2, stability: 2 }, effect: 'good' },
+      { label: '하운진에게 먼저 괜찮냐고 묻는다', next: 'eunTease', impact: { trust: 1, aclass: 1 }, effect: 'soft' },
+      { label: '검사는 됐고 배정부터 보자고 한다', next: 'seoEmergency', impact: { risk: 2, bclass: 1 }, effect: 'danger' }
     ] },
-    controlRange: { bg: scenes.control, loc: '중앙관제실', face: ha.normal, speaker: '하운진', text: '서울 생존권 안쪽은 거의 다. 사각지대가 있긴 한데, 그런 곳은 대체로 “안 보이는 이유”가 더 위험해.', next: 'eunIntro', entryEffect: 'signal' },
-    controlCadeba: { bg: scenes.control, loc: '중앙관제실', face: ha.angry, speaker: '하운진', text: '그 이름을 관제실 앞에서 너무 쉽게 꺼내지 마. 영상으로 보는 것과 실제로 마주치는 건 아예 다른 문제야.', next: 'controlCadebaLog', entryEffect: 'cadeba' },
-    controlCadebaLog: { bg: scenes.control, loc: '중앙관제실', face: ha.embarrassed, speaker: '하운진', text: '...방금 화면 튄 거 봤어? 기록 열람 권한이 없는데도 반응했다는 건 좋은 신호가 아니야. 다음으로 넘어가.', next: 'eunIntro', entryEffect: 'glitch' },
-    controlTouch: { bg: scenes.control, loc: '중앙관제실', face: ha.angry, speaker: '하운진', text: '손 떼! 신입 첫날에 관제 단말기 건드리는 놈은 처음 봤다. 플렉서스가 직접 뭐라 하기 전에 도망가.', next: 'eunIntro', entryEffect: 'glitch' },
+    seoEmergency: { bg: scenes.classroom, loc: 'B반 교실 앞 / 임시 심문', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '관제실 경고 띄운 신입이 너냐? 씨발... 첫날부터 기록 화려하네. 안 뒤졌으면 대답해라.', next: 'seoEmergencyChoice', entryEffect: 'danger' },
+    seoEmergencyChoice: { bg: scenes.classroom, loc: 'B반 교실 앞 / 임시 심문', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: 'A반 보호 관찰이든 B반 굴림 코스든, 여기서 갈린다. 네가 살아남는 방식은 뭐냐?', choices: [
+      { label: '명령대로 움직이겠다고 한다', next: 'seoBrave', impact: { trust: 1, bclass: 1, stability: 1 }, effect: 'good' },
+      { label: '테스트면 한번 해보자고 한다', next: 'seoChallenge', impact: { risk: 2, bclass: 2 }, effect: 'impact' },
+      { label: '하운진에게 도움을 청한다', next: 'seoHide', impact: { trust: 1, aclass: 1 }, effect: 'soft' },
+      { label: '외곽 로그가 뭔지 묻는다', next: 'baekgolrimWarn', impact: { risk: 2, stability: -1 }, effect: 'cadeba' }
+    ] },
+    seoChallenge: { bg: scenes.training, loc: '훈련소 / 긴급 적성 평가', face: ha.embarrassed, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '좋아. 말한 김에 몸으로 확인하자. 하운진, 윤호랑 불러. 이 신입은 말보다 충격을 먼저 넣어야겠다.', next: 'yoonIntro', entryEffect: 'impact' },
     eunIntro: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.normal, guest: cast.eun, guestName: '은해성', speaker: '은해성', text: '신입분이시군요. 너무 긴장하지 않으셔도 괜찮아요. 다친 곳이 있으면 이쪽으로 와주세요. 혼자 참지 않으셔도 됩니다.', next: 'eunChoice' },
     eunChoice: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.shy, guest: cast.eun, guestName: '은해성', speaker: '하운진', text: '은 선생님은 웃으면서 사람을 꿰뚫어 보니까 대충 넘길 생각 하지 마. 너라면 뭐라고 대답할 건데?', choices: [
       { label: '조금 다친 것 같다고 말한다', next: 'eunHonest', impact: { trust: 2, stability: 2 }, effect: 'good' },
@@ -830,36 +837,36 @@ function initHanidaeSim() {
   function getEndingResult() {
     if(stats.risk >= 5) {
       return {
-        title: 'ENDING 04 — 외곽 출입 금지',
-        desc: '호기심 수치가 너무 높음. 이 상태로 외곽 나가면 높은 확률로 실종글 제목이 된다.',
-        assign: '처분: 한이대 임시 보호 관찰'
+        title: '배정 결과 05 — 격리 관찰 대상',
+        desc: '관제실 경고, 외곽 로그, 카데바 관련 반응이 너무 많이 찍힘. 호기심이 아니라 오염 가능성으로 분류된다.',
+        assign: '처분: 외곽 출입 금지 / 관제실 상시 모니터링'
       };
     }
     if(stats.bclass >= 4) {
       return {
-        title: 'ENDING 03 — B반 관심 대상',
-        desc: '서재윤과 윤호랑 쪽 관심을 탔다. 장점은 살아남을 수도 있다는 것, 단점은 굴려질 가능성이 높다는 것.',
-        assign: '처분: B반 합동 훈련 후보'
+        title: '배정 결과 03 — B반 합동 훈련 후보',
+        desc: '서재윤과 윤호랑 쪽 관심을 탔다. 장점은 단기간에 강해질 수도 있다는 것, 단점은 그 전에 바닥과 친해진다는 것.',
+        assign: '처분: B반 합동 훈련 / 서재윤 감독'
       };
     }
     if(stats.trust >= 4 && stats.stability >= 3) {
       return {
-        title: 'ENDING 01 — 한이대 정규 신입',
-        desc: '보고 태도랑 성흔 안정도가 그럭저럭 정상. 하운진이 욕하면서도 데리고 다닐 만한 신입 판정.',
-        assign: '처분: A반 임시 관찰'
+        title: '배정 결과 01 — A반 임시 배정',
+        desc: '보고 태도와 성흔 안정도가 괜찮게 찍힘. 하운진이 욕하면서도 데리고 다닐 만한 신입 판정.',
+        assign: '처분: A반 임시 배정 / 하운진 동행'
       };
     }
     if(stats.aclass >= 3) {
       return {
-        title: 'ENDING 02 — A반 보호 관찰',
-        desc: 'A반 쪽 접점이 강하게 찍힘. 특히 카나메 관련해서는 호기심 줄이는 교육이 필요함.',
-        assign: '처분: A반 보호 관찰'
+        title: '배정 결과 02 — A반 보호 관찰',
+        desc: 'A반 쪽 접점이 강하게 찍힘. 카나메 관련 호기심이 있으면 교육이 아니라 생존 경고부터 들어간다.',
+        assign: '처분: A반 보호 관찰 / 은해성 정기 검진'
       };
     }
     return {
-      title: 'ENDING 00 — 관찰 대상',
-      desc: '아직 어느 쪽인지 애매함. 한이대 기준으로는 일단 더 굴려보고 판단하는 케이스.',
-      assign: '처분: 미정'
+      title: '배정 결과 00 — 관제실 감시 대상',
+      desc: '아직 어느 반으로 보내기 애매함. 플렉서스 기록에는 남았고, 한이대 기준으로는 더 굴려보고 판단하는 케이스.',
+      assign: '처분: 배정 보류 / 신입 로그 재검토'
     };
   }
 
@@ -875,7 +882,7 @@ function initHanidaeSim() {
     ].map(([label, value]) => `<div class="hero-vn__report-row"><span>${label}</span><strong>${value}/5</strong></div>`).join('');
     choices.innerHTML = `
       <div class="hero-vn__report">
-        <div class="hero-vn__report-kicker">종말넷 입문 시뮬 결과글</div>
+        <div class="hero-vn__report-kicker">한이대 신입 배정 시뮬 결과글</div>
         <div class="hero-vn__report-title">${result.title}</div>
         <div class="hero-vn__report-desc">${result.desc}</div>
         <div class="hero-vn__report-grid">${rows}</div>
