@@ -509,9 +509,34 @@ function initHanidaeSim() {
   };
 
   const script = {
-    start: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.normal, speaker: '하운진', text: '...신입? 거기 멀뚱히 서 있지 말고 따라와. 여긴 구경하러 오는 곳 아니거든.', next: 'classroom' },
-    classroom: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, speaker: '하운진', text: '여기가 A반. 수업은 수업이고, 실전은 실전이야. 졸면 다치고, 멋대로 나서면 더 다쳐.', next: 'control' },
-    control: { bg: scenes.control, loc: '중앙관제실', face: ha.normal, speaker: '하운진', text: '저쪽이 중앙관제실. 플렉서스가 서울 전력, 방벽, 감시망을 전부 물고 있어. 기분 나쁠 정도로 정확하지.', next: 'eunIntro' },
+    start: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.normal, speaker: '하운진', text: '...신입? 거기 멀뚱히 서 있지 말고 따라와. 여긴 구경하러 오는 곳 아니거든.', next: 'campusChoice' },
+    campusChoice: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.normal, speaker: '하운진', text: '입구부터 긴장한 얼굴이네. 좋아, 첫 반응부터 보자. 한이대 정문 앞에서 넌 뭘 할 건데?', choices: [
+      { label: '규정부터 듣겠다고 한다', next: 'campusRules', impact: { trust: 1, stability: 1 }, effect: 'good' },
+      { label: '감시 카메라에 손을 흔든다', next: 'campusWave', impact: { risk: 1, bclass: 1 }, effect: 'signal' },
+      { label: '성흔 반응부터 확인한다', next: 'campusStigma', impact: { aclass: 1, stability: 1 }, effect: 'bloom' }
+    ] },
+    campusRules: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.normal, speaker: '하운진', text: '의외로 정상적인 대답이네. 여기 규정은 귀찮으라고 있는 게 아니라, 살아서 다음날 보려고 있는 거야.', next: 'classroom' },
+    campusWave: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.embarrassed, speaker: '하운진', text: '야, 카메라에 손 흔들지 마. 플렉서스가 봤으면 이미 네 행동 패턴에 “관종 가능성 있음” 붙였을걸.', next: 'classroom', entryEffect: 'signal' },
+    campusStigma: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.shy, speaker: '하운진', text: '성흔부터 확인하는 건 나쁘지 않아. 근데 멋있다고 만지작거리진 마. 반응 튀면 네 몸이 먼저 대가 치르니까.', next: 'classroom', entryEffect: 'bloom' },
+    classroom: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, speaker: '하운진', text: '여기가 A반. 수업은 수업이고, 실전은 실전이야. 졸면 다치고, 멋대로 나서면 더 다쳐.', next: 'classroomChoice' },
+    classroomChoice: { bg: scenes.classroom, loc: 'A반 교실', face: ha.normal, speaker: '하운진', text: '교실이라고 안심하지 마. 여기선 질문 하나로도 누구랑 엮일지 갈린다. 뭘 물어볼래?', choices: [
+      { label: 'A반은 뭐가 다르냐고 묻는다', next: 'classroomAclass', impact: { aclass: 1, trust: 1 }, effect: 'soft' },
+      { label: 'B반은 더 위험하냐고 묻는다', next: 'classroomBclass', impact: { bclass: 1, risk: 1 }, effect: 'signal' },
+      { label: '요미야 카나메 자리가 어디냐고 묻는다', next: 'classroomKanameSeat', impact: { aclass: 1, risk: 2 }, effect: 'slash' }
+    ] },
+    classroomAclass: { bg: scenes.classroom, loc: 'A반 교실', face: ha.normal, speaker: '하운진', text: 'A반은 통제가 먼저야. 사고 치지 말라는 뜻이 아니라, 사고 쳐도 돌아올 선을 알고 치라는 뜻이지.', next: 'control' },
+    classroomBclass: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, speaker: '하운진', text: 'B반? 위험하지. 근데 이상하게 정은 또 많아. 문제는 그 정이 팔굽혀펴기랑 대련으로 표현된다는 거고.', next: 'control' },
+    classroomKanameSeat: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, speaker: '하운진', text: '첫 질문이 그거야? 요미야 쪽으로 먼저 시선 돌리는 신입은 보통 오래 못 간다. 일단 관제실부터 가.', next: 'control', entryEffect: 'slash' },
+    control: { bg: scenes.control, loc: '중앙관제실', face: ha.normal, speaker: '하운진', text: '저쪽이 중앙관제실. 플렉서스가 서울 전력, 방벽, 감시망을 전부 물고 있어. 기분 나쁠 정도로 정확하지.', next: 'controlChoice', entryEffect: 'signal' },
+    controlChoice: { bg: scenes.control, loc: '중앙관제실', face: ha.normal, speaker: '하운진', text: '관제실 앞에서는 말조심해. 농담 같지? 여기선 진짜로 로그 남아. 그래도 하나만 물어봐.', choices: [
+      { label: '감시망이 어디까지 보냐고 묻는다', next: 'controlRange', impact: { trust: 1, stability: 1 }, effect: 'signal' },
+      { label: '카데바 영상도 여기서 보냐고 묻는다', next: 'controlCadeba', impact: { risk: 2, stability: -1 }, effect: 'cadeba' },
+      { label: '몰래 단말기를 건드린다', next: 'controlTouch', impact: { risk: 2, trust: -1 }, effect: 'glitch' }
+    ] },
+    controlRange: { bg: scenes.control, loc: '중앙관제실', face: ha.normal, speaker: '하운진', text: '서울 생존권 안쪽은 거의 다. 사각지대가 있긴 한데, 그런 곳은 대체로 “안 보이는 이유”가 더 위험해.', next: 'eunIntro', entryEffect: 'signal' },
+    controlCadeba: { bg: scenes.control, loc: '중앙관제실', face: ha.angry, speaker: '하운진', text: '그 이름을 관제실 앞에서 너무 쉽게 꺼내지 마. 영상으로 보는 것과 실제로 마주치는 건 아예 다른 문제야.', next: 'controlCadebaLog', entryEffect: 'cadeba' },
+    controlCadebaLog: { bg: scenes.control, loc: '중앙관제실', face: ha.embarrassed, speaker: '하운진', text: '...방금 화면 튄 거 봤어? 기록 열람 권한이 없는데도 반응했다는 건 좋은 신호가 아니야. 다음으로 넘어가.', next: 'eunIntro', entryEffect: 'glitch' },
+    controlTouch: { bg: scenes.control, loc: '중앙관제실', face: ha.angry, speaker: '하운진', text: '손 떼! 신입 첫날에 관제 단말기 건드리는 놈은 처음 봤다. 플렉서스가 직접 뭐라 하기 전에 도망가.', next: 'eunIntro', entryEffect: 'glitch' },
     eunIntro: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.normal, guest: cast.eun, guestName: '은해성', speaker: '은해성', text: '신입분이시군요. 너무 긴장하지 않으셔도 괜찮아요. 다친 곳이 있으면 이쪽으로 와주세요. 혼자 참지 않으셔도 됩니다.', next: 'eunChoice' },
     eunChoice: { bg: scenes.classroom, loc: '임시 보건 구역', face: ha.shy, guest: cast.eun, guestName: '은해성', speaker: '하운진', text: '은 선생님은 웃으면서 사람을 꿰뚫어 보니까 대충 넘길 생각 하지 마. 너라면 뭐라고 대답할 건데?', choices: [
       { label: '조금 다친 것 같다고 말한다', next: 'eunHonest', impact: { trust: 2, stability: 2 }, effect: 'good' },
@@ -542,27 +567,60 @@ function initHanidaeSim() {
     haSeoReact: { bg: scenes.classroom, loc: 'B반 교실 앞', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '하운진', text: '그러게 왜 서 선생님 앞에서 입을 털어. 나까지 분위기 이상해졌잖아.', next: 'seoJokeClose' },
     seoJokeClose: { bg: scenes.classroom, loc: 'B반 교실 앞', face: ha.embarrassed, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '하운진, 네가 대신 뛰어도 된다. 신입이랑 사이좋게 백 개씩.', next: 'haSeoPanic' },
     haSeoPanic: { bg: scenes.classroom, loc: 'B반 교실 앞', face: ha.embarrassed, guest: cast.seo, guestName: '서재윤', speaker: '하운진', text: '제가 왜요?! 신입, 너 진짜 나중에 따로 보자.', next: 'dorm' },
-    dorm: { bg: scenes.dorm, loc: '기숙사', face: ha.shy, speaker: '하운진', text: '기숙사는... 뭐, 생각보다 멀쩡해. 시끄럽게 굴지만 않으면 나쁘진 않아. 진짜로.', next: 'training' },
+    dorm: { bg: scenes.dorm, loc: '기숙사', face: ha.shy, speaker: '하운진', text: '기숙사는... 뭐, 생각보다 멀쩡해. 시끄럽게 굴지만 않으면 나쁘진 않아. 진짜로.', next: 'dormChoice' },
+    dormChoice: { bg: scenes.dorm, loc: '기숙사', face: ha.shy, speaker: '하운진', text: '기숙사에서 사고 치면 수업보다 소문이 먼저 돈다. 네가 제일 먼저 확인할 건?', choices: [
+      { label: '방 규칙과 점호 시간을 묻는다', next: 'dormRules', impact: { trust: 1, stability: 1 }, effect: 'good' },
+      { label: '윤호랑도 여기 사냐고 묻는다', next: 'dormYoon', impact: { bclass: 1, risk: 1 }, effect: 'soft' },
+      { label: '카나메 방은 멀리 있냐고 묻는다', next: 'dormKaname', impact: { aclass: 1, risk: 1 }, effect: 'slash' }
+    ] },
+    dormRules: { bg: scenes.dorm, loc: '기숙사', face: ha.normal, speaker: '하운진', text: '점호는 늦지 마. 소등 후에는 복도에서 성흔력 켜지 말고. 기본만 지키면 기숙사는 의외로 안전해.', next: 'training' },
+    dormYoon: { bg: scenes.dorm, loc: '기숙사 복도', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '내 얘기 했나? 신입아, 밤에 심심하면 복도 끝 휴게실로 온나. 물론 하운진 허락부터 받고, 좋아♪', next: 'haDormYoon' },
+    haDormYoon: { bg: scenes.dorm, loc: '기숙사 복도', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '선배는 왜 꼭 이런 타이밍에 나타나요? 신입, 휴게실은 가도 되는데 저 사람 말투에 말리진 마.', next: 'training' },
+    dormKaname: { bg: scenes.dorm, loc: '기숙사 복도', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '제 방이 궁금하세요? 에헤헤, 방문 선물은 필요 없어요. 비명만 너무 크지 않으면 돼요.', next: 'haDormKaname', entryEffect: 'slash' },
+    haDormKaname: { bg: scenes.dorm, loc: '기숙사 복도', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '요미야. 기숙사 복도에서 신입 겁주지 마. 신입도 그런 걸 왜 물어봐. 훈련소나 가자.', next: 'training' },
     training: { bg: scenes.training, loc: '훈련소', face: ha.angry, speaker: '하운진', text: '훈련소에서는 장난치지 마. 성흔력은 멋있는 장식이 아니라, 네 몸을 갉아먹는 무기니까.', next: 'routeChoice' },
     routeChoice: { bg: scenes.training, loc: '훈련소', face: ha.normal, speaker: '하운진', text: '자, 신입. 첫날부터 물어볼게. 너라면 어디부터 더 확인할 건데?', choices: [
       { label: 'A반 교실', next: 'kanameIntro', impact: { aclass: 1, risk: 1 }, effect: 'soft' },
       { label: '훈련소', next: 'yoonIntro', impact: { bclass: 1 }, effect: 'good' },
+      { label: '중앙관제실 기록', next: 'plexusRoute', impact: { trust: 1, risk: 1 }, effect: 'signal' },
       { label: '백골림 권역', next: 'baekgolrimWarn', impact: { risk: 2, stability: -1 }, effect: 'danger' }
     ] },
+    plexusRoute: { bg: scenes.control, loc: '중앙관제실 기록 열람대', face: ha.normal, speaker: '하운진', text: '관제 기록을 더 본다고? 플렉서스 쪽은 묻는 순간부터 답이 아니라 테스트가 돌아온다고 보면 돼.', next: 'plexusChoice', entryEffect: 'signal' },
+    plexusChoice: { bg: scenes.control, loc: '중앙관제실 기록 열람대', face: ha.normal, speaker: '하운진', text: '기록 단말기가 켜졌다. 질문 하나만 허용된 것 같아. 뭘 확인할래?', choices: [
+      { label: '신입 평가 기준', next: 'plexusEval', impact: { trust: 1, stability: 1 }, effect: 'signal' },
+      { label: '서울 방벽 취약 구간', next: 'plexusWall', impact: { risk: 2, bclass: 1 }, effect: 'glitch' },
+      { label: '카데바 관측 로그', next: 'plexusCadeba', impact: { risk: 3, stability: -1 }, effect: 'cadeba' }
+    ] },
+    plexusEval: { bg: scenes.control, loc: '중앙관제실 기록 열람대', face: ha.shy, speaker: '하운진', text: '평가 기준은 단순해. 보고, 통제, 회복. ...그리고 멋대로 죽지 않는 것. 너 지금까지는 간신히 통과야.', next: 'ending', entryEffect: 'signal' },
+    plexusWall: { bg: scenes.control, loc: '중앙관제실 기록 열람대', face: ha.angry, speaker: '하운진', text: '그건 신입이 볼 자료가 아니야. 방벽 취약 구간을 궁금해하는 건 공부가 아니라 사고 예고에 가깝다고.', next: 'ending', entryEffect: 'glitch' },
+    plexusCadeba: { bg: scenes.control, loc: '중앙관제실 기록 열람대', face: ha.embarrassed, speaker: '하운진', text: '화면 꺼. 지금 바로. 관측 로그는 “봤다”는 사실만으로도 네 수면 패턴 망가뜨릴 수 있어.', next: 'ending', entryEffect: 'cadeba' },
     kanameIntro: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '에~ 신입이에요? 무서워하지 마세요. 아직은 안 자를 거니까요?', next: 'kanameChoice' },
     kanameChoice: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '요미야. 첫 안내에서 그런 소리 하지 말라고 했지. 신입, 뭐라고 받아칠래?', choices: [
       { label: '안 자르면 괜찮다고 한다', next: 'kanameBold', impact: { risk: 2, aclass: 1 }, effect: 'danger' },
       { label: '하운진 뒤로 물러난다', next: 'kanameHide', impact: { trust: 1, stability: 1 }, effect: 'good' },
-      { label: '전기톱은 어디 있냐고 묻는다', next: 'kanameSaw', impact: { risk: 2, aclass: 1 }, effect: 'danger' }
+      { label: '전기톱은 어디 있냐고 묻는다', next: 'kanameSaw', impact: { risk: 2, aclass: 1 }, effect: 'slash' },
+      { label: '은해성 선생님을 부른다', next: 'kanameCallEun', impact: { trust: 1, stability: 1 }, effect: 'good' }
     ] },
     kanameBold: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '와아, 담력 좋다. 그런 사람일수록 안쪽이 어떻게 생겼는지 궁금해지는데요?', next: 'haKanameReact' },
     kanameHide: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '잘했어. 쟤 웃고 있어도 절대 등 돌리지 마. 특히 “궁금하다”는 말 나오면 바로 피해.', next: 'kanameHideClose' },
     kanameHideClose: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '에이, 하운진 씨 너무해요. 전 그냥 신입분이 오래 버티는지 궁금했을 뿐인데.', next: 'haKanameSafe' },
-    haKanameSafe: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '그 “궁금”이 제일 문제라고. 신입, 방금처럼 거리 유지해. 그게 생존률 오른다.', next: 'ending' },
+    haKanameSafe: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '그 “궁금”이 제일 문제라고. 신입, 방금처럼 거리 유지해. 그게 생존률 오른다.', next: 'kanameSecondChoice' },
     kanameSaw: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '에헤헤. 궁금해요? 보여드릴까요? 뼈 모양 이쁘게 남는 쪽으로요.', next: 'haKanameReact' },
     haKanameReact: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '요미야, 그만. 그리고 신입, 너도 이상한 쪽으로 호기심 보이지 마. 여기 그런 애들 이미 충분히 많아.', next: 'kanamePush' },
     kanamePush: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '그런 애들이라니요. 하운진 씨도 전투 들어가면 꽤 무섭게 웃잖아요?', next: 'haKanameFluster' },
-    haKanameFluster: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '웃은 적 없거든?! 신입, 방금 말은 못 들은 걸로 해.', next: 'ending' },
+    haKanameFluster: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '웃은 적 없거든?! 신입, 방금 말은 못 들은 걸로 해.', next: 'kanameSecondChoice' },
+    kanameCallEun: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.eun, guestName: '은해성', speaker: '은해성', text: '카나메 씨, 신입분은 아직 입문 중이에요. 놀라게 하는 건 조금만 줄여주실래요?', next: 'kanameEunReply' },
+    kanameEunReply: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '네에. 은 선생님이 그렇게 말씀하시면 오늘은 안 자를게요. 대신 나중에 또 놀러 와요?', next: 'haKanameEunClose', entryEffect: 'slash' },
+    haKanameEunClose: { bg: scenes.classroom, loc: 'A반 교실', face: ha.shy, guest: cast.eun, guestName: '은해성', speaker: '하운진', text: '...잘했어. 위험하다 싶으면 바로 어른 부르는 것도 실력이야. 은 선생님은 그나마 말이 통하니까.', next: 'kanameSecondChoice' },
+    kanameSecondChoice: { bg: scenes.classroom, loc: 'A반 교실', face: ha.normal, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: 'A반 체험은 여기서 끊어도 되고, 하나만 더 물어봐도 돼. 대신 이상한 질문이면 내가 끊는다.', choices: [
+      { label: '카나메에게 입학 팁을 묻는다', next: 'kanameTip', impact: { aclass: 1, risk: 1 }, effect: 'soft' },
+      { label: '하운진이 진짜 무섭게 웃냐고 묻는다', next: 'kanameHaSmile', impact: { trust: 1, aclass: 1 }, effect: 'good' },
+      { label: '조용히 훈련소로 이동한다', next: 'yoonIntro', impact: { stability: 1, bclass: 1 }, effect: 'good' }
+    ] },
+    kanameTip: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '입학 팁이요? 하운진 씨가 화낼 때 바로 사과하면 살 확률이 올라가요. 그리고 제 전기톱 소리는 멀리서 들을수록 좋아요.', next: 'haKanameTip' },
+    haKanameTip: { bg: scenes.classroom, loc: 'A반 교실', face: ha.angry, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '앞부분만 맞고 뒷부분은 버려. 신입, 네가 지금 배운 건 거리 조절이야. 기억해.', next: 'ending' },
+    kanameHaSmile: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.kaname, guestName: '요미야 카나메', speaker: '요미야 카나메', text: '진짜요. 적이 날아갈 때 아주 잠깐 웃어요. 그때는 좀 멋있어서 짜증 나요.', next: 'haKanameSmile' },
+    haKanameSmile: { bg: scenes.classroom, loc: 'A반 교실', face: ha.embarrassed, guest: cast.kaname, guestName: '요미야 카나메', speaker: '하운진', text: '멋있다는 말로 이상한 소리 포장하지 마. 신입, 너도 고개 끄덕이지 말고.', next: 'ending' },
     yoonIntro: { bg: scenes.training, loc: '훈련소', face: ha.normal, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '훈련부터 보겠다고? 좋다 아이가. 몸으로 부딪히는 아들은 오래 살아남는다. 근데 신입아, 너무 빡빡하게 굴진 마라. 밤엔 좀 풀 줄도 알아야지, 좋아♪', next: 'yoonChoice' },
     yoonChoice: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '윤호랑 선배. 입문 안내 중에 그런 식으로 들이대지 마세요. 신입, 저 사람한테 뭐라고 할래?', choices: [
       { label: '훈련만 부탁한다고 선 긋는다', next: 'yoonLine', impact: { stability: 1, bclass: 1 }, effect: 'good' },
@@ -573,25 +631,55 @@ function initHanidaeSim() {
     yoonLine: { bg: scenes.training, loc: '훈련소', face: ha.normal, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '오, 선 긋는 거 보소. 좋다. 훈련은 진짜로 봐줄게. 대신 쓰러지면 내가 업고 간다, 좋아♪', next: 'haYoonReact' },
     yoonDialect: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '억양 와 그라노? 귀엽긴 한데, 부산 사람 앞에서 그라면 혼난다 아이가.', next: 'yoonDialectHa' },
     yoonDialectHa: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '따라 하지 마. 왜 첫날부터 이상한 것만 배우고 있어?', next: 'yoonDialectClose' },
-    yoonDialectClose: { bg: scenes.training, loc: '훈련소', face: ha.normal, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '와, 하운진이 질색하는 거 보니 제대로 배웠네. 신입아, 다음엔 억양부터 살려보자.', next: 'ending' },
+    yoonDialectClose: { bg: scenes.training, loc: '훈련소', face: ha.normal, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '와, 하운진이 질색하는 거 보니 제대로 배웠네. 신입아, 다음엔 억양부터 살려보자.', next: 'yoonSecondChoice' },
     yoonFlirtAgree: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '오, 받아치는 거 보소. 좋다 아이가. 훈련 끝나고 살아 있으면 내가 서울에서 제일 덜 맛없는 배급식 알려줄게.', next: 'haYoonFlirtReact' },
     haYoonFlirtReact: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '입문 안내를 왜 데이트 코스 소개로 바꾸는 건데요? 그리고 신입, 너도 거기 장단 맞추지 마.', next: 'yoonFlirtPush' },
     yoonFlirtPush: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '질투하나? 표정이 딱 그런데.', next: 'haYoonFlirtEnd' },
-    haYoonFlirtEnd: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '아니거든요. 신입, 웃지 마. 오늘 훈련 강도 올릴 거야. 둘 다.', next: 'ending' },
+    haYoonFlirtEnd: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '아니거든요. 신입, 웃지 마. 오늘 훈련 강도 올릴 거야. 둘 다.', next: 'yoonSecondChoice' },
     yoonHa: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '나한테 떠넘기지 마. ...그래도 윤호랑 선배, 신입 겁먹었잖아요. 적당히 하세요.', next: 'yoonHaClose' },
     yoonHaClose: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '알았다 알았다. 하운진이 이렇게 감싸면 내가 더 건드리고 싶어지는 거 알제?', next: 'haYoonProtect' },
-    haYoonProtect: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '감싼 거 아니거든요. 그냥 입문 첫날부터 이상한 사람한테 말리는 걸 막은 거예요.', next: 'ending' },
+    haYoonProtect: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '감싼 거 아니거든요. 그냥 입문 첫날부터 이상한 사람한테 말리는 걸 막은 거예요.', next: 'yoonSecondChoice' },
     haYoonReact: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '저 사람 말은 반만 들어. 실력은 진짜니까 거기까지만 믿고, 나머지는 전부 흘려.', next: 'yoonReactClose' },
-    yoonReactClose: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '반만 믿으라니 섭섭하네. 그래도 신입아, 훈련하다 쓰러지면 진짜 업어준다. 그건 믿어도 된다.', next: 'ending' },
+    yoonReactClose: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '반만 믿으라니 섭섭하네. 그래도 신입아, 훈련하다 쓰러지면 진짜 업어준다. 그건 믿어도 된다.', next: 'yoonSecondChoice' },
+    yoonSecondChoice: { bg: scenes.training, loc: '훈련소', face: ha.normal, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '자, 말만 들으면 재미없제. 신입아, 훈련소 왔으면 하나는 해보고 가야지. 뭐 할래?', choices: [
+      { label: '가볍게 대련을 부탁한다', next: 'yoonSpar', impact: { bclass: 2, risk: 1, stability: 1 }, effect: 'impact' },
+      { label: '하운진이 얼마나 강한지 묻는다', next: 'yoonAskHaPower', impact: { trust: 1, aclass: 1 }, effect: 'good' },
+      { label: '카나메보다 안전하냐고 묻는다', next: 'yoonKanameCompare', impact: { bclass: 1, risk: 1 }, effect: 'soft' }
+    ] },
+    yoonSpar: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '좋다 아이가. 딱 한 번만 받아준다. 대신 날아가도 울지 마라?', next: 'haYoonSparWarn', entryEffect: 'impact' },
+    haYoonSparWarn: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '가볍게라는 말 믿지 마. 윤호랑 선배 기준 가볍게는 보통 벽에 한 번 박는 정도야.', next: 'yoonSparHit' },
+    yoonSparHit: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '오, 안 넘어졌네? 신입아, 자세는 엉망인데 근성은 좀 있다. 하운진, 얘 봐라?', next: 'haYoonSparClose', entryEffect: 'impact' },
+    haYoonSparClose: { bg: scenes.training, loc: '훈련소', face: ha.shy, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '...넘어지지 않은 건 잘했어. 근데 방금 걸로 자신감 붙으면 바로 다친다. 오늘은 여기까지.', next: 'ending' },
+    yoonAskHaPower: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '하운진? 쟤 빡치면 진짜 무섭다. 평소엔 틱틱대는데, 막상 싸움 나면 앞에 서는 타입이라 더 골치 아프제.', next: 'haYoonPower' },
+    haYoonPower: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '그런 설명 하지 마세요. 신입, 나 평가하지 말고 네 자세나 신경 써.', next: 'ending' },
+    yoonKanameCompare: { bg: scenes.training, loc: '훈련소', face: ha.embarrassed, guest: cast.yoon, guestName: '윤호랑', speaker: '윤호랑', text: '카나메랑 비교하면 내가 천사지. 뭐, 내 방식도 좀 과격하긴 한데 적어도 웃으면서 자르진 않잖아?', next: 'haYoonKanameCompare' },
+    haYoonKanameCompare: { bg: scenes.training, loc: '훈련소', face: ha.angry, guest: cast.yoon, guestName: '윤호랑', speaker: '하운진', text: '비교 기준이 이상하잖아요. 신입, 한이대에서는 “덜 위험함”을 “안전함”으로 착각하면 안 돼.', next: 'ending' },
     baekgolrimWarn: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, speaker: '하운진', text: '야, 미쳤어? 거긴 입문 코스가 아니라 사망 코스야. 지도에서 봤다고 실제로 갈 생각 하지 마.', next: 'baekgolrimChoice' },
     baekgolrimChoice: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '외곽? 신입이 첫날부터 자살 관광 코스를 고르네. 이유나 들어보자.', choices: [
       { label: '위험 구역부터 알고 싶다고 한다', next: 'baekgolrimSerious', impact: { risk: 1, stability: 1 }, effect: 'soft' },
       { label: '실수로 눌렀다고 한다', next: 'baekgolrimMistake', impact: { stability: 1 }, effect: 'good' },
       { label: '카데바가 궁금하다고 한다', next: 'baekgolrimCadeba', impact: { risk: 3, stability: -1 }, effect: 'danger' }
     ] },
-    baekgolrimSerious: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.normal, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '방향은 틀렸지만 태도는 낫네. 위험 구역은 현장 가서 배우는 게 아니라 살아 돌아온 기록으로 배우는 거다.', next: 'ending' },
+    baekgolrimSerious: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.normal, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '방향은 틀렸지만 태도는 낫네. 위험 구역은 현장 가서 배우는 게 아니라 살아 돌아온 기록으로 배우는 거다.', next: 'baekgolrimBrief' },
+    baekgolrimBrief: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '하운진', text: '백골림은 카데바를 신처럼 모시지만, 카데바는 그 사람들한테 관심도 없어. 그 불균형이 제일 무서운 거야.', next: 'baekgolrimBriefChoice', entryEffect: 'cadeba' },
+    baekgolrimBriefChoice: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '위험 구역 브리핑은 딱 하나만 더 한다. 뭘 기억할래?', choices: [
+      { label: '카데바 숭배자를 피하는 법', next: 'baekgolrimCult', impact: { stability: 1, trust: 1 }, effect: 'soft' },
+      { label: '외곽에서 살아 돌아오는 법', next: 'baekgolrimSurvive', impact: { bclass: 1, stability: 1 }, effect: 'good' },
+      { label: '카데바가 왜 신 취급받는지', next: 'baekgolrimCadebaDeep', impact: { risk: 2, stability: -1 }, effect: 'cadeba' }
+    ] },
+    baekgolrimCult: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.normal, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '말 섞지 마. 눈 마주치지 마. “살아있는 신” 같은 소리 나오면 설득하지 말고 빠져. 미친 믿음은 논리로 안 꺾인다.', next: 'ending' },
+    baekgolrimSurvive: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '하운진', text: '혼자 움직이지 말기. 빛나는 거 만지지 말기. 누가 친절하게 부르면 반대로 뛰기. 유치해 보여도 이게 생존 매뉴얼이야.', next: 'ending' },
+    baekgolrimCadebaDeep: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.embarrassed, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '그 질문을 오래 붙잡으면 머리부터 망가진다. 카데바는 이유를 알려주는 존재가 아니라, 이유를 무의미하게 만드는 쪽이야.', next: 'haBaekgolrimDeep', entryEffect: 'cadeba' },
+    haBaekgolrimDeep: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '하운진', text: '여기서 끝. 더 들으면 입문이 아니라 오염이야. 돌아간다.', next: 'ending' },
     baekgolrimMistake: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.embarrassed, speaker: '하운진', text: '...그럴 줄 알았어. 첫날부터 외곽 누르는 신입이 정상일 리가 없지. 돌아가자.', next: 'ending' },
-    baekgolrimCadeba: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '카데바가 궁금하면 관제 영상이나 봐. 실제로 보면 궁금증보다 유언이 먼저 나온다.', next: 'ending' },
+    baekgolrimCadeba: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '카데바가 궁금하면 관제 영상이나 봐. 실제로 보면 궁금증보다 유언이 먼저 나온다.', next: 'cadebaWarningHa', entryEffect: 'cadeba' },
+    cadebaWarningHa: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.embarrassed, guest: cast.seo, guestName: '서재윤', speaker: '하운진', text: '...잠깐. 지금 화면 노이즈 이상해. 신입, 뒤돌아보지 말고 내 말만 들어. 셋 세면 돌아간다.', next: 'cadebaChoice', entryEffect: 'glitch' },
+    cadebaChoice: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.embarrassed, guest: cast.seo, guestName: '서재윤', speaker: '하운진', text: '하나, 둘. 마지막으로 선택해. 진짜 마지막이야.', choices: [
+      { label: '바로 돌아간다', next: 'cadebaRetreat', impact: { stability: 2, trust: 1 }, effect: 'good' },
+      { label: '한 번만 더 본다', next: 'cadebaLook', impact: { risk: 3, stability: -2 }, effect: 'cadeba' }
+    ] },
+    cadebaRetreat: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.shy, speaker: '하운진', text: '잘했어. 궁금한 걸 참고 돌아서는 것도 능력이야. ...진짜로, 방금은 잘했어.', next: 'ending', entryEffect: 'good' },
+    cadebaLook: { bg: scenes.baekgolrim, loc: '백골림 권역', face: ha.angry, guest: cast.seo, guestName: '서재윤', speaker: '서재윤', text: '씨발, 눈 감아. 하운진, 끌고 나가. 이 신입은 오늘부로 외곽 출입 금지다.', next: 'ending', entryEffect: 'cadeba' },
     ending: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.shy, speaker: '하운진', text: '...그래도 여기까지 들었으면 됐어. 살아남고 싶으면 혼자 잘난 척하지 마. 내 뒤에 서. 방해만 하지 말고.' }
   };
 
@@ -599,6 +687,7 @@ function initHanidaeSim() {
   const history = [];
   let vnAudioContext;
   let stats = { trust: 1, risk: 0, stability: 1, aclass: 0, bclass: 0 };
+  const vnEffectClasses = ['vn-effect--soft', 'vn-effect--good', 'vn-effect--danger', 'vn-effect--signal', 'vn-effect--glitch', 'vn-effect--bloom', 'vn-effect--slash', 'vn-effect--impact', 'vn-effect--cadeba'];
   const statEls = {
     trust: { fill: root.querySelector('[data-stat-fill="trust"]'), value: root.querySelector('[data-stat-value="trust"]') },
     risk: { fill: root.querySelector('[data-stat-fill="risk"]'), value: root.querySelector('[data-stat-value="risk"]') },
@@ -662,6 +751,33 @@ function initHanidaeSim() {
         makeTone(520, 'sawtooth', 0.18, 0.16, 170);
         return;
       }
+      if(tone === 'glitch' || tone === 'signal') {
+        makeNoise(0.16, 0.12);
+        makeTone(1180, 'square', 0.13, 0.08, 420);
+        setTimeout(() => makeTone(760, 'square', 0.1, 0.07, 980), 42);
+        return;
+      }
+      if(tone === 'bloom') {
+        makeTone(440, 'sine', 0.14, 0.18, 660);
+        setTimeout(() => makeTone(880, 'triangle', 0.1, 0.16, 1320), 70);
+        return;
+      }
+      if(tone === 'slash') {
+        makeNoise(0.2, 0.11);
+        makeTone(1320, 'sawtooth', 0.11, 0.08, 220);
+        return;
+      }
+      if(tone === 'impact') {
+        makeNoise(0.28, 0.16);
+        makeTone(180, 'square', 0.18, 0.14, 90);
+        return;
+      }
+      if(tone === 'cadeba') {
+        makeNoise(0.26, 0.24);
+        makeTone(96, 'sawtooth', 0.18, 0.26, 52);
+        setTimeout(() => makeTone(520, 'sine', 0.08, 0.2, 300), 80);
+        return;
+      }
       if(tone === 'good') {
         makeTone(720, 'triangle', 0.18, 0.11, 960);
         setTimeout(() => makeTone(980, 'triangle', 0.13, 0.09, 1220), 45);
@@ -705,10 +821,10 @@ function initHanidaeSim() {
   }
 
   function flashStage(effect = 'soft') {
-    root.classList.remove('vn-effect--soft', 'vn-effect--good', 'vn-effect--danger');
+    root.classList.remove(...vnEffectClasses);
     void root.offsetWidth;
     root.classList.add(`vn-effect--${effect}`);
-    setTimeout(() => root.classList.remove(`vn-effect--${effect}`), 520);
+    setTimeout(() => root.classList.remove(`vn-effect--${effect}`), 680);
   }
 
   function getEndingResult() {
@@ -808,6 +924,7 @@ function initHanidaeSim() {
       next.disabled = false;
       renderReport();
     }
+    if(scene.entryEffect) flashStage(scene.entryEffect);
     prev.disabled = history.length === 0 && index === 'start';
     updateStats();
     root.classList.remove('is-advancing');

@@ -549,7 +549,13 @@ body {
 }
 .hero-vn.vn-effect--soft .hero-vn__stage::after,
 .hero-vn.vn-effect--good .hero-vn__stage::after,
-.hero-vn.vn-effect--danger .hero-vn__stage::after {
+.hero-vn.vn-effect--danger .hero-vn__stage::after,
+.hero-vn.vn-effect--signal .hero-vn__stage::after,
+.hero-vn.vn-effect--glitch .hero-vn__stage::after,
+.hero-vn.vn-effect--bloom .hero-vn__stage::after,
+.hero-vn.vn-effect--slash .hero-vn__stage::after,
+.hero-vn.vn-effect--impact .hero-vn__stage::after,
+.hero-vn.vn-effect--cadeba .hero-vn__stage::after {
   content:'';
   position:absolute;
   inset:0;
@@ -571,6 +577,53 @@ body {
     repeating-linear-gradient(0deg, rgba(198,63,53,0.22) 0 2px, transparent 2px 8px),
     radial-gradient(circle at center, rgba(198,63,53,0.18), transparent 66%);
 }
+.hero-vn.vn-effect--signal .hero-vn__stage::after {
+  background:
+    linear-gradient(180deg, transparent 0 28%, rgba(108,184,216,0.22) 30%, transparent 34%),
+    repeating-linear-gradient(90deg, rgba(108,184,216,0.12) 0 1px, transparent 1px 18px);
+  animation:vnSignalSweep 0.66s ease-out;
+}
+.hero-vn.vn-effect--glitch .hero-vn__stage {
+  animation:vnGlitchJolt 0.34s steps(2, end);
+}
+.hero-vn.vn-effect--glitch .hero-vn__stage::after {
+  background:
+    linear-gradient(90deg, rgba(108,184,216,0.18), transparent 32%, rgba(198,63,53,0.14) 64%, transparent),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.12) 0 1px, transparent 1px 5px);
+  mix-blend-mode:screen;
+  animation:vnGlitchTear 0.42s steps(3, end);
+}
+.hero-vn.vn-effect--bloom .hero-vn__stage::after {
+  background:
+    radial-gradient(circle at 38% 54%, rgba(245,218,120,0.32), transparent 26%),
+    radial-gradient(circle at 56% 44%, rgba(120,190,170,0.18), transparent 40%);
+  animation:vnBloomPulse 0.68s ease-out;
+}
+.hero-vn.vn-effect--slash .hero-vn__stage::after {
+  background:
+    linear-gradient(128deg, transparent 0 43%, rgba(255,244,220,0.72) 45%, rgba(198,63,53,0.34) 47%, transparent 50%),
+    linear-gradient(122deg, transparent 0 55%, rgba(198,63,53,0.22) 56%, transparent 60%);
+  animation:vnSlashCut 0.46s ease-out;
+}
+.hero-vn.vn-effect--impact .hero-vn__stage {
+  animation:vnImpactHit 0.32s ease-out;
+}
+.hero-vn.vn-effect--impact .hero-vn__stage::after {
+  background:
+    radial-gradient(circle at 52% 78%, rgba(245,232,190,0.28), transparent 18%),
+    radial-gradient(circle at center, rgba(198,63,53,0.16), transparent 62%);
+  animation:vnImpactDust 0.54s ease-out;
+}
+.hero-vn.vn-effect--cadeba .hero-vn__stage {
+  animation:vnCadebaDread 0.58s ease-out;
+}
+.hero-vn.vn-effect--cadeba .hero-vn__stage::after {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(198,63,53,0.28), transparent 18%),
+    radial-gradient(circle at center, rgba(0,0,0,0.18), rgba(0,0,0,0.62)),
+    repeating-linear-gradient(0deg, rgba(198,63,53,0.16) 0 1px, transparent 1px 6px);
+  animation:vnCadebaPulse 0.68s ease-out;
+}
 @keyframes vnChoiceFlash {
   from { opacity:0; transform:scaleX(0.7); }
   30% { opacity:1; }
@@ -581,6 +634,53 @@ body {
   25% { transform:translateX(-5px); }
   50% { transform:translateX(4px); }
   75% { transform:translateX(-2px); }
+}
+@keyframes vnSignalSweep {
+  from { opacity:0; transform:translateY(-38%); }
+  28% { opacity:1; }
+  to { opacity:0; transform:translateY(38%); }
+}
+@keyframes vnGlitchJolt {
+  0%, 100% { transform:translate(0,0); filter:none; }
+  25% { transform:translate(-4px,2px); filter:hue-rotate(18deg) contrast(1.18); }
+  50% { transform:translate(5px,-1px); filter:hue-rotate(-12deg) contrast(1.24); }
+  75% { transform:translate(-2px,-2px); filter:hue-rotate(9deg) contrast(1.1); }
+}
+@keyframes vnGlitchTear {
+  from { opacity:0; transform:translateX(-12px); }
+  36% { opacity:0.9; transform:translateX(8px); }
+  to { opacity:0; transform:translateX(0); }
+}
+@keyframes vnBloomPulse {
+  from { opacity:0; transform:scale(0.78); }
+  42% { opacity:1; }
+  to { opacity:0; transform:scale(1.18); }
+}
+@keyframes vnSlashCut {
+  from { opacity:0; transform:translateX(-42%) skewX(-10deg); }
+  36% { opacity:1; }
+  to { opacity:0; transform:translateX(38%) skewX(-10deg); }
+}
+@keyframes vnImpactHit {
+  0%, 100% { transform:translate(0,0) scale(1); }
+  25% { transform:translate(3px,4px) scale(1.01); }
+  55% { transform:translate(-4px,-2px) scale(0.995); }
+}
+@keyframes vnImpactDust {
+  from { opacity:0; transform:scale(0.86) translateY(18px); }
+  36% { opacity:0.95; }
+  to { opacity:0; transform:scale(1.24) translateY(-8px); }
+}
+@keyframes vnCadebaDread {
+  0%, 100% { transform:translateX(0); filter:none; }
+  20% { transform:translateX(-3px); filter:saturate(0.72) contrast(1.22); }
+  48% { transform:translateX(3px); filter:saturate(0.6) contrast(1.32); }
+  72% { transform:translateX(-1px); filter:saturate(0.8) contrast(1.12); }
+}
+@keyframes vnCadebaPulse {
+  from { opacity:0; transform:scale(0.92); }
+  35% { opacity:1; }
+  to { opacity:0; transform:scale(1.1); }
 }
 @keyframes vnReportIn {
   from { opacity:0; transform:translateY(8px); }
