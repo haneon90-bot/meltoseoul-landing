@@ -2995,41 +2995,42 @@ body::before {
 
 @media (max-width:768px) {
   .hero-vn {
-    width:100%;
-    margin:18px 0 26px;
+    width:min(100%, 420px);
+    margin:18px auto 26px;
   }
 
   .hero-vn__stage {
-    height:340px;
+    height:220px;
   }
 
   .hero-vn__sprite,
   .hero-vn__guest {
-    max-height:112%;
+    max-height:106%;
   }
 
   .hero-vn__guest {
-    right:-8%;
+    right:-5%;
+    max-height:102%;
   }
 
   .hero-vn__dialogue {
-    min-height:188px;
-    padding:14px;
+    min-height:174px;
+    padding:12px;
   }
 
   .hero-vn__line {
-    min-height:64px;
-    font-size:0.92rem;
+    min-height:48px;
+    font-size:0.82rem;
   }
 }
 
 @media (max-width:480px) {
   .hero-vn__stage {
-    height:320px;
+    height:220px;
   }
 
   .hero-vn__sprite,
   .hero-vn__guest {
-    max-height:116%;
+    max-height:106%;
   }
 }
