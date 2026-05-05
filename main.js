@@ -474,6 +474,7 @@ function initHanidaeSim() {
   const root = document.getElementById('hanidae-sim');
   const bg = document.getElementById('vn-bg');
   const video = document.getElementById('vn-video');
+  const videoStart = document.getElementById('vn-video-start');
   const sprite = document.getElementById('vn-sprite');
   const guest = document.getElementById('vn-guest');
   const stage = root.querySelector('.hero-vn__stage');
@@ -484,7 +485,7 @@ function initHanidaeSim() {
   const prev = document.getElementById('vn-prev');
   const next = document.getElementById('vn-next');
   const restart = document.getElementById('vn-restart');
-  if(!root || !bg || !video || !sprite || !guest || !stage || !location || !speaker || !line || !choices || !prev || !next || !restart) return;
+  if(!root || !bg || !video || !videoStart || !sprite || !guest || !stage || !location || !speaker || !line || !choices || !prev || !next || !restart) return;
 
   const ha = {
     normal: '/vn-ha-woonjin-normal-opt.png',
@@ -696,6 +697,7 @@ function initHanidaeSim() {
   let index = firstScene;
   const history = [];
   let vnAudioContext;
+  let vnVideoStarted = false;
   let stats = { trust: 1, risk: 0, stability: 1, aclass: 0, bclass: 0 };
   const vnEffectClasses = ['vn-effect--soft', 'vn-effect--good', 'vn-effect--danger', 'vn-effect--signal', 'vn-effect--glitch', 'vn-effect--bloom', 'vn-effect--slash', 'vn-effect--impact', 'vn-effect--cadeba', 'vn-effect--alarm'];
   const statEls = {
@@ -900,6 +902,25 @@ function initHanidaeSim() {
     `;
   }
 
+  function startSceneVideo() {
+    const scene = script[index];
+    if(!scene.video || vnVideoStarted) return false;
+    vnVideoStarted = true;
+    root.dataset.video = 'playing';
+    videoStart.classList.remove('active');
+    videoStart.disabled = true;
+    video.muted = false;
+    video.currentTime = 0;
+    const playPromise = video.play();
+    if(playPromise?.catch) {
+      playPromise.catch(() => {
+        video.muted = true;
+        video.play().catch(() => {});
+      });
+    }
+    return true;
+  }
+
   function render() {
     const scene = script[index];
     root.dataset.face = scene.face === ha.normal ? 'normal' : 'variant';
@@ -911,25 +932,26 @@ function initHanidaeSim() {
     if(scene.video) {
       if(video.getAttribute('src') !== scene.video) {
         video.src = scene.video;
-        video.currentTime = 0;
       }
       video.classList.add('active');
+      video.pause();
+      video.currentTime = 0;
       video.muted = false;
-      delete video.dataset.soundReady;
-      const playPromise = video.play();
-      if(playPromise?.catch) {
-        playPromise.catch(() => {
-          video.muted = true;
-          video.play().catch(() => {});
-        });
-      }
+      vnVideoStarted = false;
+      root.dataset.video = 'ready';
+      videoStart.textContent = scene.videoStartLabel || '입문시뮬 시작';
+      videoStart.disabled = false;
+      videoStart.classList.add('active');
     } else {
       video.pause();
       video.classList.remove('active');
       video.removeAttribute('src');
       video.load();
       video.muted = true;
-      delete video.dataset.soundReady;
+      vnVideoStarted = false;
+      root.dataset.video = 'none';
+      videoStart.disabled = true;
+      videoStart.classList.remove('active');
     }
     sprite.src = scene.face;
     location.textContent = scene.loc;
@@ -976,13 +998,7 @@ function initHanidaeSim() {
   function advanceScene() {
     const scene = script[index];
     if(scene.choices) return;
-    if(scene.video && video.muted && !video.ended && video.dataset.soundReady !== '1') {
-      video.dataset.soundReady = '1';
-      video.muted = false;
-      video.currentTime = 0;
-      video.play().catch(() => {});
-      return;
-    }
+    if(startSceneVideo()) return;
     const nextIndex = scene.next ?? 'start';
     const nextScene = script[nextIndex];
     playVnClick(nextScene?.entryEffect || 'soft');
@@ -993,6 +1009,10 @@ function initHanidaeSim() {
 
   next.addEventListener('click', advanceScene);
   stage.addEventListener('click', advanceScene);
+  videoStart.addEventListener('click', event => {
+    event.stopPropagation();
+    startSceneVideo();
+  });
 
   prev.addEventListener('click', () => {
     if(history.length) {
