@@ -69,12 +69,19 @@ function initBgmController() {
     audio.volume = 0;
   });
 
+  function startTrack(audio) {
+    if(!audio.paused) return;
+    audio.volume = Math.max(audio.volume, 0.01);
+    const playAttempt = audio.play();
+    if(playAttempt?.catch) playAttempt.catch(() => {});
+  }
+
   function fadeTo(audio, target, duration = 700) {
     const token = (fadeTokens.get(audio) || 0) + 1;
     fadeTokens.set(audio, token);
     const start = audio.volume;
     const startedAt = performance.now();
-    if(target > 0) audio.play().catch(() => {});
+    if(target > 0) startTrack(audio);
 
     function step(now) {
       if(token !== fadeTokens.get(audio)) return;
@@ -122,6 +129,7 @@ function initBgmController() {
     currentMode = mode;
     paused = false;
     unlocked = true;
+    startTrack(tracks[currentMode]);
     applyMode();
     updateToggle();
   }
@@ -810,6 +818,7 @@ function initHanidaeSim() {
   let vnVideoStarted = false;
   let vnSessionActive = false;
   let vnInView = true;
+  let forceVnBgmUntil = 0;
   let stats = { trust: 1, risk: 0, stability: 1, aclass: 0, bclass: 0 };
   const vnEffectClasses = ['vn-effect--soft', 'vn-effect--good', 'vn-effect--danger', 'vn-effect--signal', 'vn-effect--glitch', 'vn-effect--bloom', 'vn-effect--slash', 'vn-effect--impact', 'vn-effect--cadeba', 'vn-effect--alarm'];
   const statEls = {
@@ -1020,6 +1029,7 @@ function initHanidaeSim() {
     vnVideoStarted = true;
     vnSessionActive = true;
     vnInView = isVnStageInView();
+    forceVnBgmUntil = performance.now() + 4000;
     window.MELTO_BGM?.unlockVn();
     root.dataset.video = 'playing';
     videoStart.classList.remove('active');
@@ -1051,7 +1061,7 @@ function initHanidaeSim() {
 
   function syncVnBgm() {
     if(!vnSessionActive || !window.MELTO_BGM) return;
-    vnInView = isVnStageInView();
+    vnInView = performance.now() < forceVnBgmUntil || isVnStageInView();
     if(vnInView) {
       window.MELTO_BGM.activateVn();
     } else {
@@ -1145,6 +1155,18 @@ function initHanidaeSim() {
     render();
   }
 
+  function primeVnBgmFromGesture() {
+    const scene = script[index];
+    if(scene?.video && !vnVideoStarted) {
+      window.MELTO_BGM?.unlockVn();
+    }
+  }
+
+  [next, stage, videoStart].forEach(control => {
+    control.addEventListener('pointerdown', primeVnBgmFromGesture, { passive: true });
+    control.addEventListener('touchstart', primeVnBgmFromGesture, { passive: true });
+  });
+
   next.addEventListener('click', advanceScene);
   stage.addEventListener('click', advanceScene);
   videoStart.addEventListener('click', event => {
@@ -1155,7 +1177,7 @@ function initHanidaeSim() {
   if('IntersectionObserver' in window) {
     const vnObserver = new IntersectionObserver(entries => {
       const entry = entries[0];
-      vnInView = isVnStageInView() || Boolean(entry?.isIntersecting && entry.intersectionRatio > 0.08);
+      vnInView = performance.now() < forceVnBgmUntil || isVnStageInView() || Boolean(entry?.isIntersecting && entry.intersectionRatio > 0.08);
       syncVnBgm();
     }, { threshold: [0, 0.08, 0.28, 0.55] });
     vnObserver.observe(stage);
