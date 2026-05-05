@@ -509,6 +509,7 @@ function initHanidaeSim() {
   };
 
   const script = {
+    sigilIntro: { bg: scenes.classroom, loc: '신입 안내 / 성흔 기초', face: ha.normal, speaker: '하운진', text: '하운진이 자기 어깨를 엄지로 툭 가리켰다. "이게 성흔이야. 극한 상황에서 일부 인간한테 새겨지고, 이능력을 쓰게 만드는 표식. 멋있어 보이지? 관리 못 하면 네 몸부터 망가져."', next: 'start', entryEffect: 'signal' },
     start: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.normal, speaker: '관제 시스템', text: '신입생 등록 절차 진행 중. 미등록 성흔 반응 감지. 등록 중단. 임시 위계 판정: 측정 불가.', next: 'alarmHa', entryEffect: 'alarm', alert: 'siren' },
     alarmHa: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.angry, speaker: '하운진', text: '너, 방금까지 신입생 등록 중이었지? 네 성흔 반응 때문에 관제실이 멈췄어. ...방금 뭐 했어?', next: 'alarmChoice', entryEffect: 'alarm', alert: 'siren' },
     alarmChoice: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.angry, speaker: '하운진', text: '여긴 한이대 신입 배정 등록대야. 대답 잘해. 지금 네 첫마디가 배정표에 바로 찍힌다.', alert: 'siren', choices: [
@@ -690,7 +691,8 @@ function initHanidaeSim() {
     ending: { bg: scenes.campus, loc: '한이대 캠퍼스', face: ha.shy, speaker: '하운진', text: '...그래도 여기까지 들었으면 됐어. 살아남고 싶으면 혼자 잘난 척하지 마. 내 뒤에 서. 방해만 하지 말고.' }
   };
 
-  let index = 'start';
+  const firstScene = 'sigilIntro';
+  let index = firstScene;
   const history = [];
   let vnAudioContext;
   let stats = { trust: 1, risk: 0, stability: 1, aclass: 0, bclass: 0 };
@@ -939,7 +941,7 @@ function initHanidaeSim() {
       renderReport();
     }
     if(scene.entryEffect) flashStage(scene.entryEffect);
-    prev.disabled = history.length === 0 && index === 'start';
+    prev.disabled = history.length === 0 && index === firstScene;
     updateStats();
     root.classList.remove('is-advancing');
     void root.offsetWidth;
@@ -970,7 +972,7 @@ function initHanidaeSim() {
 
   restart.addEventListener('click', () => {
     playVnClick('choice');
-    index = 'start';
+    index = firstScene;
     stats = { trust: 1, risk: 0, stability: 1, aclass: 0, bclass: 0 };
     history.length = 0;
     render();
