@@ -3444,10 +3444,10 @@ body {
   gap:8px;
   min-height:38px;
   padding:0 12px;
-  border:1px solid rgba(116,166,255,0.28);
+  border:1px solid rgba(255,226,150,0.36);
   border-radius:8px;
   background:rgba(8,10,12,0.9);
-  color:#dbeaff;
+  color:#fff2bf;
   font-family:var(--font-mono);
   font-size:0.58rem;
   font-weight:800;
@@ -3472,21 +3472,21 @@ body {
   width:18px;
   height:18px;
   border-radius:50%;
-  background:rgba(116,166,255,0.12);
+  background:rgba(255,226,150,0.15);
   color:#ffe296;
   font-size:0.68rem;
   line-height:1;
 }
 
-.bgm-toggle.is-muted {
-  border-color:rgba(255,255,255,0.12);
-  color:rgba(221,232,255,0.52);
+.bgm-toggle.is-paused {
+  border-color:rgba(116,166,255,0.28);
+  color:#dbeaff;
   background:rgba(8,10,12,0.78);
 }
 
-.bgm-toggle.is-muted .bgm-toggle__icon {
-  background:rgba(255,255,255,0.07);
-  color:rgba(221,232,255,0.55);
+.bgm-toggle.is-paused .bgm-toggle__icon {
+  background:rgba(116,166,255,0.12);
+  color:#9fc6ff;
 }
 
 @media (max-width:768px) {

@@ -58,10 +58,9 @@ function initBgmController() {
   const vnAudio = new Audio('/vn-bgm.mp3');
   const tracks = { site: siteAudio, vn: vnAudio };
   const targetVolumes = { site: 0.18, vn: 0.26 };
-  const storageKey = 'melto-bgm-muted';
   let unlocked = false;
   let currentMode = 'site';
-  let muted = readMutedPreference();
+  let paused = true;
   const fadeTokens = new WeakMap();
 
   Object.values(tracks).forEach(audio => {
@@ -93,35 +92,19 @@ function initBgmController() {
     requestAnimationFrame(step);
   }
 
-  function readMutedPreference() {
-    try {
-      return localStorage.getItem(storageKey) === 'true';
-    } catch {
-      return false;
-    }
-  }
-
-  function writeMutedPreference() {
-    try {
-      localStorage.setItem(storageKey, muted ? 'true' : 'false');
-    } catch {
-      // Storage can be blocked in strict browser modes.
-    }
-  }
-
   function updateToggle() {
     if(!toggle) return;
     const icon = toggle.querySelector('.bgm-toggle__icon');
     const label = toggle.querySelector('.bgm-toggle__label');
-    toggle.classList.toggle('is-muted', muted);
-    toggle.setAttribute('aria-pressed', String(muted));
-    toggle.setAttribute('aria-label', muted ? '배경음악 켜기' : '배경음악 끄기');
-    if(icon) icon.textContent = muted ? '×' : '♪';
-    if(label) label.textContent = muted ? 'BGM OFF' : 'BGM ON';
+    toggle.classList.toggle('is-paused', paused);
+    toggle.setAttribute('aria-pressed', String(!paused));
+    toggle.setAttribute('aria-label', paused ? '배경음악 재생' : '배경음악 일시정지');
+    if(icon) icon.textContent = paused ? '▶' : 'Ⅱ';
+    if(label) label.textContent = paused ? 'BGM 재생' : 'BGM 일시정지';
   }
 
   function applyMode() {
-    if(!unlocked || muted) {
+    if(!unlocked || paused) {
       fadeTo(siteAudio, 0);
       fadeTo(vnAudio, 0);
       return;
@@ -135,47 +118,23 @@ function initBgmController() {
     applyMode();
   }
 
-  function unlockAndPlay(mode = currentMode) {
+  function play(mode = currentMode) {
     currentMode = mode;
+    paused = false;
     unlocked = true;
-    document.removeEventListener('pointerdown', unlockFromGesture);
-    document.removeEventListener('keydown', unlockFromGesture);
     applyMode();
-  }
-
-  function unlockFromGesture(event) {
-    if(toggle?.contains?.(event?.target)) return;
-    const mode = event?.target?.closest?.('#hanidae-sim') ? 'vn' : currentMode;
-    unlockAndPlay(mode);
-  }
-
-  function attemptAutoplay() {
-    if(muted || unlocked) return;
-    const audio = tracks[currentMode];
-    audio.volume = targetVolumes[currentMode];
-    const playAttempt = audio.play();
-    if(!playAttempt?.then) return;
-
-    playAttempt.then(() => {
-      unlocked = true;
-      document.removeEventListener('pointerdown', unlockFromGesture);
-      document.removeEventListener('keydown', unlockFromGesture);
-      applyMode();
-    }).catch(() => {
-      audio.pause();
-      audio.volume = 0;
-    });
-  }
-
-  function toggleMuted() {
-    muted = !muted;
-    writeMutedPreference();
-    if(!muted && !unlocked) {
-      unlockAndPlay(currentMode);
-    } else {
-      applyMode();
-    }
     updateToggle();
+  }
+
+  function pause() {
+    paused = true;
+    applyMode();
+    updateToggle();
+  }
+
+  function togglePlayback() {
+    if(paused) play(currentMode);
+    else pause();
   }
 
   if(toggle) {
@@ -184,22 +143,21 @@ function initBgmController() {
     toggle.addEventListener('click', event => {
       event.preventDefault();
       event.stopPropagation();
-      toggleMuted();
+      togglePlayback();
     });
     updateToggle();
   }
 
-  document.addEventListener('pointerdown', unlockFromGesture, { passive: true });
-  document.addEventListener('keydown', unlockFromGesture);
-  setTimeout(attemptAutoplay, 300);
-
   window.MELTO_BGM = {
     activateSite() { setMode('site'); },
     activateVn() { setMode('vn'); },
-    unlockSite() { unlockAndPlay('site'); },
-    unlockVn() { unlockAndPlay('vn'); },
-    toggle() { toggleMuted(); },
-    isMuted() { return muted; }
+    unlockSite() { play('site'); },
+    unlockVn() { play('vn'); },
+    playSite() { play('site'); },
+    playVn() { play('vn'); },
+    pause() { pause(); },
+    toggle() { togglePlayback(); },
+    isPaused() { return paused; }
   };
 }
 
