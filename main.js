@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
   initIntroScreen();
+  initBgmController();
   initParticles();
   initCharacters();
   initCommunityBoard();
@@ -50,6 +51,74 @@ document.addEventListener('DOMContentLoaded', () => {
   initClickEffects();
   initBreakingNews();
 });
+
+function initBgmController() {
+  const siteAudio = new Audio('/site-bgm.mp3');
+  const vnAudio = new Audio('/vn-bgm.mp3');
+  const tracks = { site: siteAudio, vn: vnAudio };
+  const targetVolumes = { site: 0.18, vn: 0.26 };
+  let unlocked = false;
+  let currentMode = 'site';
+  const fadeTokens = new WeakMap();
+
+  Object.values(tracks).forEach(audio => {
+    audio.loop = true;
+    audio.preload = 'auto';
+    audio.volume = 0;
+  });
+
+  function fadeTo(audio, target, duration = 700) {
+    const token = (fadeTokens.get(audio) || 0) + 1;
+    fadeTokens.set(audio, token);
+    const start = audio.volume;
+    const startedAt = performance.now();
+    if(target > 0) audio.play().catch(() => {});
+
+    function step(now) {
+      if(token !== fadeTokens.get(audio)) return;
+      const progress = Math.min(1, (now - startedAt) / duration);
+      audio.volume = start + (target - start) * progress;
+      if(progress < 1) {
+        requestAnimationFrame(step);
+        return;
+      }
+      audio.volume = target;
+      if(target === 0) {
+        audio.pause();
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function setMode(mode) {
+    currentMode = mode;
+    if(!unlocked) return;
+    fadeTo(siteAudio, mode === 'site' ? targetVolumes.site : 0);
+    fadeTo(vnAudio, mode === 'vn' ? targetVolumes.vn : 0);
+  }
+
+  function unlockAndPlay(mode = currentMode) {
+    unlocked = true;
+    document.removeEventListener('pointerdown', unlockFromGesture);
+    document.removeEventListener('keydown', unlockFromGesture);
+    setMode(mode);
+  }
+
+  function unlockFromGesture(event) {
+    const mode = event?.target?.closest?.('#hanidae-sim') ? 'vn' : currentMode;
+    unlockAndPlay(mode);
+  }
+
+  document.addEventListener('pointerdown', unlockFromGesture, { passive: true });
+  document.addEventListener('keydown', unlockFromGesture);
+
+  window.MELTO_BGM = {
+    activateSite() { setMode('site'); },
+    activateVn() { setMode('vn'); },
+    unlockSite() { unlockAndPlay('site'); },
+    unlockVn() { unlockAndPlay('vn'); }
+  };
+}
 
 function initIntroScreen() {
   const intro = document.getElementById('intro-screen');
@@ -698,6 +767,8 @@ function initHanidaeSim() {
   const history = [];
   let vnAudioContext;
   let vnVideoStarted = false;
+  let vnSessionActive = false;
+  let vnInView = true;
   let stats = { trust: 1, risk: 0, stability: 1, aclass: 0, bclass: 0 };
   const vnEffectClasses = ['vn-effect--soft', 'vn-effect--good', 'vn-effect--danger', 'vn-effect--signal', 'vn-effect--glitch', 'vn-effect--bloom', 'vn-effect--slash', 'vn-effect--impact', 'vn-effect--cadeba', 'vn-effect--alarm'];
   const statEls = {
@@ -906,9 +977,11 @@ function initHanidaeSim() {
     const scene = script[index];
     if(!scene.video || vnVideoStarted) return false;
     vnVideoStarted = true;
+    vnSessionActive = true;
     root.dataset.video = 'playing';
     videoStart.classList.remove('active');
     videoStart.disabled = true;
+    syncVnBgm();
     video.muted = false;
     video.currentTime = 0;
     const playPromise = video.play();
@@ -919,6 +992,15 @@ function initHanidaeSim() {
       });
     }
     return true;
+  }
+
+  function syncVnBgm() {
+    if(!vnSessionActive || !window.MELTO_BGM) return;
+    if(vnInView) {
+      window.MELTO_BGM.activateVn();
+    } else {
+      window.MELTO_BGM.activateSite();
+    }
   }
 
   function render() {
@@ -1011,8 +1093,18 @@ function initHanidaeSim() {
   stage.addEventListener('click', advanceScene);
   videoStart.addEventListener('click', event => {
     event.stopPropagation();
+    window.MELTO_BGM?.unlockVn();
     startSceneVideo();
   });
+
+  if('IntersectionObserver' in window) {
+    const vnObserver = new IntersectionObserver(entries => {
+      const entry = entries[0];
+      vnInView = Boolean(entry?.isIntersecting && entry.intersectionRatio > 0.18);
+      syncVnBgm();
+    }, { threshold: [0, 0.18, 0.45] });
+    vnObserver.observe(root);
+  }
 
   prev.addEventListener('click', () => {
     if(history.length) {
