@@ -14,7 +14,7 @@ const CHARACTERS = {
     { id: 'yoon-horang', name: '윤호랑', aliases: ['B반 학생', '부산 사투리 분위기메이커'], threat: 'caution', stigma: '왼쪽 등 상단', ability: '수인화. 송곳니와 발톱 포함 신체 강화. 쉽게 말해 몸으로 들이받는 쪽에 강함.', bloom: '호쇄결박 (목의 쇠사슬로 속박)', desc: 'B반 학생. 부산 사투리, 플러팅, 농담이 기본값이라 처음 보면 페이스 말리기 좋음.', height: '189cm', nationality: '대한민국', quote: '이 정도는 끄떡없다 아이가, 좋아♪' }
   ],
   baekgolrim: [
-    { id: 'cadeba', name: '카데바', aliases: ['백골림의 살아있는 신', '무소속 재앙'], threat: 'apocalypse', stigma: '전신을 덮은 검은 부족 문신', ability: '골격 증식. 자기 뼈를 늘리고 변형하고 쏘는, 설명만 들어도 상대하기 싫은 계열.', bloom: '백골만상 (뼈다발 광역 돌출 및 폭격)', desc: '동아시아 각국 정부를 전복시킨 세계 4대 재앙 중 하나. 백골림이 신으로 떠받들지만 정작 본인은 백골림에 소속감도 관심도 없다.', height: '210cm', nationality: '불명', quote: '비명 질러!!! 더 크게!!! 아하하하하!!!' }
+    { id: 'cadeba', name: '카데바', aliases: ['백골림의 살아있는 신', '무소속 재앙'], threat: 'apocalypse', stigma: '전신을 덮은 검은 부족 문신', ability: '골격 증식. 자기 뼈를 늘리고 변형하고 쏘는, 설명만 들어도 상대하기 싫은 계열.', bloom: '백골만상 (뼈다발 광역 돌출 및 폭격)', desc: '세계 4대 재앙이라 불리는 종말급 이능력자 중 하나로, 동아시아 각국 정부를 전복시킨 재앙. 백골림이 신으로 떠받들지만 정작 본인은 백골림에 소속감도 관심도 없다.', height: '210cm', nationality: '불명', quote: '비명 질러!!! 더 크게!!! 아하하하하!!!' }
   ],
   nokwon: [
     { id: 'lee-rok', name: '이록', aliases: ['녹원 보스'], threat: 'disaster', stigma: '오른쪽 종아리', ability: '식생 조종. 몸이나 주변 식물을 촉수처럼 부려서 도시를 식물판으로 갈아엎는다.', bloom: '녹식융해 (초광역 식생 침식, 포자와 맹독)', desc: '녹원의 보스. 자연 회귀를 말하지만 결과물은 인간 문명 삭제에 가깝다.', height: '171cm', nationality: '불명', quote: '노려보는 얼굴도 좋네. 너무 애쓰지 마.' }
