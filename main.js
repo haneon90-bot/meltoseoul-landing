@@ -32,6 +32,73 @@ const COMMUNITY_POSTS = [
   { category: 'filter', label: '삭제', time: '23:12', title: '[삭제됨] 카데바 좌표글 어디 감?', body: '원문 좌표랑 첨부파일 전부 증발함. 플렉서스 필터가 이렇게 빨리 물면 보통 진짜라는 뜻.', footer: '조회 19,024 · 추천 612 · 댓글 204' }
 ];
 
+const IMAGE_BOARD_POSTS = {
+  cadeba: {
+    theme: 'cadeba',
+    label: '[동굴짤]',
+    title: '[동굴짤] 카데바 자는 거 찍은 놈 살아있냐',
+    meta: '조회 48921 · 추천 1204 · 댓글 666',
+    author: '외곽렉카_탈출함',
+    time: '03:18',
+    image: '/doomnet-cadeba-live.png',
+    alt: '동굴에서 잠든 카데바를 멀리서 찍은 제보 이미지',
+    body: '동굴 안쪽에서 카데바가 자는 모습으로 보이는 캡처. 촬영자는 방송 제목을 세 번 바꾸다가 마지막에 채팅창만 남기고 끊김.',
+    comments: [
+      { nick: 'ㅇㅇ', ip: '223.39', time: '03:19', text: '자는 종말급을 왜 찍고 있냐. 조회수에 목숨 담보 잡힌 새끼냐' },
+      { nick: 'ㅇㅇ', ip: '106.101', time: '03:19', text: 'ㄴ 렉카는 원래 브레이크가 없음. 그래서 보통 브레이크 전에 죽음', reply: true },
+      { nick: '한이대못감', ip: '118.235', time: '03:20', text: '근데 저거 동굴이 아니라 보스룸 아니냐? 화면 구도부터 컷신임' },
+      { nick: 'ㅇㅇ', ip: '211.36', time: '03:20', text: '잠자는 카데바라니 말만 보면 귀여운데 실제론 서울 멸망 버튼 옆에서 셀카 찍는 거임' },
+      { nick: '플렉서스알바', ip: '39.7', time: '03:21', text: '이 글 아직 안 썰린 거 보면 필터도 어이없어서 3초 멈춘 듯' },
+      { nick: 'ㅇㅇ', ip: '175.223', time: '03:22', text: 'ㄴ 아니 지금 썰리면 진짜 인증이라서 일부러 냅두는 거 아니냐', reply: true },
+      { nick: '뼈싫어', ip: '121.162', time: '03:24', text: '저거 숨소리 들린다는 댓글 보고 음소거했음. 나만 쫄았냐' },
+      { nick: 'ㅇㅇ', ip: '223.62', time: '03:24', text: '정상임. 안 쫄면 백골림 지원서 쓰러 가면 됨', reply: true }
+    ]
+  },
+  'yoon-horang': {
+    theme: 'hot',
+    label: '[박제]',
+    title: '[박제] 윤호랑 남의 침대에서 속옷바람 검거ㅋㅋ',
+    meta: '조회 31087 · 추천 892 · 댓글 349',
+    author: '현애인추정',
+    time: '01:47',
+    image: '/doomnet-yoon-horang-exposed.png',
+    alt: '윤호랑이 다른 사람 침대에서 속옷만 입고 있는 박제 이미지',
+    body: '윤호랑의 애인 중 한 명이 올린 것으로 추정되는 박제글. 다른 사람 침대에서 속옷 차림으로 찍힌 사진 때문에 해명문보다 댓글창이 먼저 터졌다.',
+    comments: [
+      { nick: 'ㅇㅇ', ip: '223.38', time: '01:48', text: '제목만 보고 주작인 줄 알았는데 사진 보고 말문 막힘ㅋㅋ' },
+      { nick: 'ㅇㅇ', ip: '118.235', time: '01:48', text: '애인 중 한 명이라는 문장부터 이미 정상참작 불가임' },
+      { nick: '부산사람아님', ip: '211.246', time: '01:49', text: '이 정도면 바람이 아니라 태풍 경보 아니냐' },
+      { nick: 'ㅇㅇ', ip: '39.7', time: '01:49', text: 'ㄴ 한이대 방어선보다 윤호랑 해명문이 먼저 무너질 듯', reply: true },
+      { nick: '호랑이검거반', ip: '106.102', time: '01:50', text: '남의 침대에서 “아이가 오해다” 시전하면 진짜 레전드' },
+      { nick: 'ㅇㅇ', ip: '175.223', time: '01:51', text: '현애인추정 닉네임 개무섭네. 전애인도 아니고 현애인임' },
+      { nick: 'ㅇㅇ', ip: '223.62', time: '01:52', text: 'ㄴ 다음 글: 현애인2 등장했습니다', reply: true },
+      { nick: 'B반관전자', ip: '121.162', time: '01:53', text: '수인화보다 빠른 게 플러팅 회전율이었노' },
+      { nick: 'ㅇㅇ', ip: '39.7', time: '01:54', text: '한이대 ㄱㅅㄲ 박제합니다가 아니라 한이대 게시판 전체 공지로 올려야 됨' }
+    ]
+  },
+  'lee-rok': {
+    theme: 'green',
+    label: '[잡지]',
+    title: '[잡지] 이록 농사 커버 이거 홍보냐 침식예고냐',
+    meta: '조회 22410 · 추천 731 · 댓글 188',
+    author: '녹원취재팀제보',
+    time: '00:12',
+    image: '/doomnet-lee-rok-farm-cover.png',
+    alt: '이록이 농부 차림으로 밭을 가는 녹원 홍보 잡지 표지 이미지',
+    body: '녹원 홍보용 잡지 표지로 추정. 농사하는 장면만 보면 평화로운데, 촬영지 주변 콘크리트가 반나절 만에 흙으로 바뀌었다는 댓글이 붙었다.',
+    comments: [
+      { nick: 'ㅇㅇ', ip: '223.39', time: '00:13', text: '농부 코스프레인 줄 알았는데 진짜 지형 바꾸는 중이라 더 무서움' },
+      { nick: '인천못감', ip: '118.235', time: '00:14', text: '표지는 귀농 잡지인데 내용물은 도시 삭제 예고장임' },
+      { nick: 'ㅇㅇ', ip: '106.101', time: '00:15', text: 'ㄴ “이번 달 특집: 콘크리트를 비옥한 흙으로” 미쳤냐고', reply: true },
+      { nick: '풀알레르기', ip: '211.36', time: '00:16', text: '이록 웃는 얼굴 뒤에 도로 먹히는 거 보이는 거 나만 봄?' },
+      { nick: '녹원탈주희망', ip: '39.7', time: '00:17', text: '녹원 홍보팀 감성 진짜 이상함. 힐링인 척하면서 숨이 막힘' },
+      { nick: 'ㅇㅇ', ip: '175.223', time: '00:18', text: '근데 표지 디자인은 잘 뽑았네. 그래서 더 킹받음' },
+      { nick: 'ㅇㅇ', ip: '223.62', time: '00:19', text: 'ㄴ 인정하면 지는 건데 인정할 수밖에 없는 그 느낌', reply: true },
+      { nick: '생존권주민', ip: '121.162', time: '00:20', text: '서울에 밭 생기면 좋은 거 아니냐고 했다가 옆에서 등짝 맞음. 설명 듣고 납득함' }
+    ]
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   if('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
@@ -45,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFactionTest();
   initHanidaeSim();
   initDossierModal();
+  initImageBoard();
   initMobileNav();
   setupSmoothScroll();
   initFactionCards();
@@ -383,6 +451,69 @@ function initCommunityBoard() {
     el.className = 'board-post';
     el.innerHTML = `<div class="board-post__no">${String(idx + 1).padStart(3, '0')}</div><div class="board-post__content"><div class="board-post__header"><span class="board-post__category board-post__category--${p.category}">${p.label || p.category.toUpperCase()}</span><span class="board-post__time">${p.time}</span></div><div class="board-post__title">${p.title}</div><div class="board-post__body">${p.body}</div><div class="board-post__footer">${p.footer}</div></div>`;
     board.appendChild(el);
+  });
+}
+
+function initImageBoard() {
+  const posts = document.querySelectorAll('.image-post[data-post]');
+  const modal = document.getElementById('dossier-modal');
+  const body = document.getElementById('modal-body');
+  if(!posts.length || !modal || !body) return;
+
+  function renderComments(comments) {
+    return comments.map((comment, idx) => `
+      <div class="image-thread__comment ${comment.reply ? 'is-reply' : ''}">
+        <div class="image-thread__comment-head">
+          <strong>${comment.nick}</strong>
+          <span>${comment.ip}</span>
+          <em>${comment.time}</em>
+          <i>#${String(idx + 1).padStart(2, '0')}</i>
+        </div>
+        <p>${comment.text}</p>
+      </div>
+    `).join('');
+  }
+
+  function openImagePost(key) {
+    const post = IMAGE_BOARD_POSTS[key];
+    if(!post) return;
+    body.innerHTML = `
+      <article class="image-thread image-thread--${post.theme}">
+        <header class="image-thread__header">
+          <div class="image-thread__label">${post.label}</div>
+          <h2>${post.title}</h2>
+          <div class="image-thread__meta">
+            <span>${post.author}</span>
+            <span>${post.time}</span>
+            <span>${post.meta}</span>
+          </div>
+        </header>
+        <figure class="image-thread__figure">
+          <img src="${post.image}" alt="${post.alt}">
+        </figure>
+        <div class="image-thread__body">${post.body}</div>
+        <section class="image-thread__comments" aria-label="종말갤 댓글">
+          <div class="image-thread__comments-head">
+            <span>댓글 ${post.comments.length}</span>
+            <strong>종말갤 반응</strong>
+          </div>
+          ${renderComments(post.comments)}
+        </section>
+      </article>
+    `;
+    modal.classList.add('active');
+    const panel = modal.querySelector('.modal-panel');
+    if(panel) panel.scrollTop = 0;
+  }
+
+  posts.forEach(post => {
+    post.addEventListener('click', () => openImagePost(post.dataset.post));
+    post.addEventListener('keydown', event => {
+      if(event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openImagePost(post.dataset.post);
+      }
+    });
   });
 }
 
