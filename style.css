@@ -765,15 +765,32 @@ body {
 .hero-vn__bg {
   position:absolute;
   inset:0;
+  z-index:0;
   width:100%;
   height:100%;
   object-fit:cover;
   filter:contrast(1.08) brightness(0.72) saturate(0.9);
   transform:scale(1.02);
 }
+.hero-vn__video {
+  position:absolute;
+  inset:0;
+  z-index:1;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  background:#050508;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.24s ease;
+}
+.hero-vn__video.active {
+  opacity:1;
+}
 .hero-vn__shade {
   position:absolute;
   inset:0;
+  z-index:2;
   background:
     linear-gradient(90deg, rgba(5,5,8,0.78), transparent 28%, transparent 62%, rgba(5,5,8,0.62)),
     linear-gradient(0deg, rgba(5,5,8,0.78), transparent 42%);
@@ -840,6 +857,12 @@ body {
 .hero-vn__guest.active {
   opacity:1;
   transform:translateX(0);
+}
+.hero-vn[data-media="video"] .hero-vn__bg,
+.hero-vn[data-media="video"] .hero-vn__sprite,
+.hero-vn[data-media="video"] .hero-vn__guest {
+  opacity:0;
+  visibility:hidden;
 }
 .hero-vn__dialogue {
   position:relative;

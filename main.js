@@ -473,6 +473,7 @@ function initFactionTest() {
 function initHanidaeSim() {
   const root = document.getElementById('hanidae-sim');
   const bg = document.getElementById('vn-bg');
+  const video = document.getElementById('vn-video');
   const sprite = document.getElementById('vn-sprite');
   const guest = document.getElementById('vn-guest');
   const stage = root.querySelector('.hero-vn__stage');
@@ -483,7 +484,7 @@ function initHanidaeSim() {
   const prev = document.getElementById('vn-prev');
   const next = document.getElementById('vn-next');
   const restart = document.getElementById('vn-restart');
-  if(!root || !bg || !sprite || !guest || !stage || !location || !speaker || !line || !choices || !prev || !next || !restart) return;
+  if(!root || !bg || !video || !sprite || !guest || !stage || !location || !speaker || !line || !choices || !prev || !next || !restart) return;
 
   const ha = {
     normal: '/vn-ha-woonjin-normal-opt.png',
@@ -509,7 +510,7 @@ function initHanidaeSim() {
   };
 
   const script = {
-    sigilIntro: { bg: scenes.classroom, loc: '신입 안내 / 성흔 기초', face: ha.normal, speaker: '하운진', text: '어이, 네가 이번에 들어온 신입이지? 안내 길게 할 시간 없으니까 이것만 들어. 하운진이 자기 어깨를 엄지로 툭 가리켰다. "이게 성흔이야. 이능력을 쓰게 만드는 표식. 관리 못 하면 네 몸부터 망가져."', next: 'start', entryEffect: 'signal' },
+    sigilIntro: { bg: scenes.classroom, video: '/vn-ha-woonjin-intro.mp4', loc: '신입 안내 / 성흔 기초', face: ha.normal, speaker: '하운진', text: '어이, 네가 이번에 들어온 신입이지? 안내 길게 할 시간 없으니까 이것만 들어. 하운진이 자기 어깨를 엄지로 툭 가리켰다. "이게 성흔이야. 이능력을 쓰게 만드는 표식. 관리 못 하면 네 몸부터 망가져."', next: 'start', entryEffect: 'signal' },
     start: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.normal, speaker: '관제 시스템', text: '신입생 등록 절차 진행 중. 미등록 성흔 반응 감지. 등록 중단. 임시 위계 판정: 측정 불가.', next: 'alarmHa', entryEffect: 'alarm', alert: 'siren' },
     alarmHa: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.angry, speaker: '하운진', text: '너, 방금까지 신입생 등록 중이었지? 네 성흔 반응 때문에 관제실이 멈췄어. ...방금 뭐 했어?', next: 'alarmChoice', entryEffect: 'alarm', alert: 'siren' },
     alarmChoice: { bg: scenes.control, loc: '중앙관제실 / 신입생 등록대', face: ha.angry, speaker: '하운진', text: '여긴 한이대 신입 배정 등록대야. 대답 잘해. 지금 네 첫마디가 배정표에 바로 찍힌다.', alert: 'siren', choices: [
@@ -905,7 +906,31 @@ function initHanidaeSim() {
     root.dataset.speaker = scene.speaker === '하운진' ? 'ha' : 'guest';
     root.dataset.guest = scene.guestName || 'none';
     root.dataset.alert = scene.alert || 'none';
+    root.dataset.media = scene.video ? 'video' : 'image';
     bg.src = scene.bg;
+    if(scene.video) {
+      if(video.getAttribute('src') !== scene.video) {
+        video.src = scene.video;
+        video.currentTime = 0;
+      }
+      video.classList.add('active');
+      video.muted = false;
+      delete video.dataset.soundReady;
+      const playPromise = video.play();
+      if(playPromise?.catch) {
+        playPromise.catch(() => {
+          video.muted = true;
+          video.play().catch(() => {});
+        });
+      }
+    } else {
+      video.pause();
+      video.classList.remove('active');
+      video.removeAttribute('src');
+      video.load();
+      video.muted = true;
+      delete video.dataset.soundReady;
+    }
     sprite.src = scene.face;
     location.textContent = scene.loc;
     speaker.textContent = scene.speaker;
@@ -951,6 +976,13 @@ function initHanidaeSim() {
   function advanceScene() {
     const scene = script[index];
     if(scene.choices) return;
+    if(scene.video && video.muted && !video.ended && video.dataset.soundReady !== '1') {
+      video.dataset.soundReady = '1';
+      video.muted = false;
+      video.currentTime = 0;
+      video.play().catch(() => {});
+      return;
+    }
     const nextIndex = scene.next ?? 'start';
     const nextScene = script[nextIndex];
     playVnClick(nextScene?.entryEffect || 'soft');
