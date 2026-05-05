@@ -1019,6 +1019,8 @@ function initHanidaeSim() {
     if(!scene.video || vnVideoStarted) return false;
     vnVideoStarted = true;
     vnSessionActive = true;
+    vnInView = isVnStageInView();
+    window.MELTO_BGM?.unlockVn();
     root.dataset.video = 'playing';
     videoStart.classList.remove('active');
     videoStart.disabled = true;
@@ -1035,8 +1037,21 @@ function initHanidaeSim() {
     return true;
   }
 
+  function isVnStageInView() {
+    const rect = stage.getBoundingClientRect();
+    const viewportH = window.innerHeight || document.documentElement.clientHeight || 0;
+    if(!viewportH || rect.height <= 0) return true;
+    const visibleTop = Math.max(rect.top, 0);
+    const visibleBottom = Math.min(rect.bottom, viewportH);
+    const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+    const visibleEnough = visibleHeight >= Math.min(140, rect.height * 0.28);
+    const viewportCenterBand = rect.top < viewportH * 0.72 && rect.bottom > viewportH * 0.18;
+    return visibleEnough || viewportCenterBand;
+  }
+
   function syncVnBgm() {
     if(!vnSessionActive || !window.MELTO_BGM) return;
+    vnInView = isVnStageInView();
     if(vnInView) {
       window.MELTO_BGM.activateVn();
     } else {
@@ -1134,17 +1149,16 @@ function initHanidaeSim() {
   stage.addEventListener('click', advanceScene);
   videoStart.addEventListener('click', event => {
     event.stopPropagation();
-    window.MELTO_BGM?.unlockVn();
     startSceneVideo();
   });
 
   if('IntersectionObserver' in window) {
     const vnObserver = new IntersectionObserver(entries => {
       const entry = entries[0];
-      vnInView = Boolean(entry?.isIntersecting && entry.intersectionRatio > 0.18);
+      vnInView = isVnStageInView() || Boolean(entry?.isIntersecting && entry.intersectionRatio > 0.08);
       syncVnBgm();
-    }, { threshold: [0, 0.18, 0.45] });
-    vnObserver.observe(root);
+    }, { threshold: [0, 0.08, 0.28, 0.55] });
+    vnObserver.observe(stage);
   }
 
   prev.addEventListener('click', () => {
