@@ -53,12 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initBgmController() {
+  const toggle = document.getElementById('bgm-toggle');
   const siteAudio = new Audio('/site-bgm.mp3');
   const vnAudio = new Audio('/vn-bgm.mp3');
   const tracks = { site: siteAudio, vn: vnAudio };
   const targetVolumes = { site: 0.18, vn: 0.26 };
+  const storageKey = 'melto-bgm-muted';
   let unlocked = false;
   let currentMode = 'site';
+  let muted = readMutedPreference();
   const fadeTokens = new WeakMap();
 
   Object.values(tracks).forEach(audio => {
@@ -90,23 +93,82 @@ function initBgmController() {
     requestAnimationFrame(step);
   }
 
+  function readMutedPreference() {
+    try {
+      return localStorage.getItem(storageKey) === 'true';
+    } catch {
+      return false;
+    }
+  }
+
+  function writeMutedPreference() {
+    try {
+      localStorage.setItem(storageKey, muted ? 'true' : 'false');
+    } catch {
+      // Storage can be blocked in strict browser modes.
+    }
+  }
+
+  function updateToggle() {
+    if(!toggle) return;
+    const icon = toggle.querySelector('.bgm-toggle__icon');
+    const label = toggle.querySelector('.bgm-toggle__label');
+    toggle.classList.toggle('is-muted', muted);
+    toggle.setAttribute('aria-pressed', String(muted));
+    toggle.setAttribute('aria-label', muted ? '배경음악 켜기' : '배경음악 끄기');
+    if(icon) icon.textContent = muted ? '×' : '♪';
+    if(label) label.textContent = muted ? 'BGM OFF' : 'BGM ON';
+  }
+
+  function applyMode() {
+    if(!unlocked || muted) {
+      fadeTo(siteAudio, 0);
+      fadeTo(vnAudio, 0);
+      return;
+    }
+    fadeTo(siteAudio, currentMode === 'site' ? targetVolumes.site : 0);
+    fadeTo(vnAudio, currentMode === 'vn' ? targetVolumes.vn : 0);
+  }
+
   function setMode(mode) {
     currentMode = mode;
-    if(!unlocked) return;
-    fadeTo(siteAudio, mode === 'site' ? targetVolumes.site : 0);
-    fadeTo(vnAudio, mode === 'vn' ? targetVolumes.vn : 0);
+    applyMode();
   }
 
   function unlockAndPlay(mode = currentMode) {
+    currentMode = mode;
     unlocked = true;
     document.removeEventListener('pointerdown', unlockFromGesture);
     document.removeEventListener('keydown', unlockFromGesture);
-    setMode(mode);
+    applyMode();
   }
 
   function unlockFromGesture(event) {
+    if(toggle?.contains?.(event?.target)) return;
     const mode = event?.target?.closest?.('#hanidae-sim') ? 'vn' : currentMode;
     unlockAndPlay(mode);
+  }
+
+  function toggleMuted() {
+    muted = !muted;
+    writeMutedPreference();
+    if(!muted && !unlocked) {
+      unlockAndPlay(currentMode);
+    } else {
+      applyMode();
+    }
+    updateToggle();
+  }
+
+  if(toggle) {
+    toggle.addEventListener('pointerdown', event => event.stopPropagation());
+    toggle.addEventListener('keydown', event => event.stopPropagation());
+    toggle.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleMuted();
+    });
+    updateToggle();
   }
 
   document.addEventListener('pointerdown', unlockFromGesture, { passive: true });
@@ -116,7 +178,9 @@ function initBgmController() {
     activateSite() { setMode('site'); },
     activateVn() { setMode('vn'); },
     unlockSite() { unlockAndPlay('site'); },
-    unlockVn() { unlockAndPlay('vn'); }
+    unlockVn() { unlockAndPlay('vn'); },
+    toggle() { toggleMuted(); },
+    isMuted() { return muted; }
   };
 }
 

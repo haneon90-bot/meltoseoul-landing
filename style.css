@@ -3431,3 +3431,70 @@ body {
     font-size:1.1rem;
   }
 }
+
+/* ═══════════════ BGM TOGGLE ═══════════════ */
+.bgm-toggle {
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:9995;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:38px;
+  padding:0 12px;
+  border:1px solid rgba(116,166,255,0.28);
+  border-radius:8px;
+  background:rgba(8,10,12,0.9);
+  color:#dbeaff;
+  font-family:var(--font-mono);
+  font-size:0.58rem;
+  font-weight:800;
+  letter-spacing:0.04em;
+  cursor:pointer;
+  box-shadow:0 10px 24px rgba(0,0,0,0.32), inset 0 0 0 1px rgba(255,255,255,0.03);
+  backdrop-filter:blur(12px);
+  transition:transform 0.18s ease, border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+
+.bgm-toggle:hover,
+.bgm-toggle:focus-visible {
+  transform:translateY(-1px);
+  border-color:rgba(255,226,150,0.42);
+  color:#fff2bf;
+  outline:none;
+}
+
+.bgm-toggle__icon {
+  display:grid;
+  place-items:center;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:rgba(116,166,255,0.12);
+  color:#ffe296;
+  font-size:0.68rem;
+  line-height:1;
+}
+
+.bgm-toggle.is-muted {
+  border-color:rgba(255,255,255,0.12);
+  color:rgba(221,232,255,0.52);
+  background:rgba(8,10,12,0.78);
+}
+
+.bgm-toggle.is-muted .bgm-toggle__icon {
+  background:rgba(255,255,255,0.07);
+  color:rgba(221,232,255,0.55);
+}
+
+@media (max-width:768px) {
+  .bgm-toggle {
+    right:12px;
+    bottom:78px;
+    min-height:34px;
+    padding:0 10px;
+    font-size:0.52rem;
+  }
+}
