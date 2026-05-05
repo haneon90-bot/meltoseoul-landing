@@ -149,6 +149,24 @@ function initBgmController() {
     unlockAndPlay(mode);
   }
 
+  function attemptAutoplay() {
+    if(muted || unlocked) return;
+    const audio = tracks[currentMode];
+    audio.volume = targetVolumes[currentMode];
+    const playAttempt = audio.play();
+    if(!playAttempt?.then) return;
+
+    playAttempt.then(() => {
+      unlocked = true;
+      document.removeEventListener('pointerdown', unlockFromGesture);
+      document.removeEventListener('keydown', unlockFromGesture);
+      applyMode();
+    }).catch(() => {
+      audio.pause();
+      audio.volume = 0;
+    });
+  }
+
   function toggleMuted() {
     muted = !muted;
     writeMutedPreference();
@@ -173,6 +191,7 @@ function initBgmController() {
 
   document.addEventListener('pointerdown', unlockFromGesture, { passive: true });
   document.addEventListener('keydown', unlockFromGesture);
+  setTimeout(attemptAutoplay, 300);
 
   window.MELTO_BGM = {
     activateSite() { setMode('site'); },
