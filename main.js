@@ -67,13 +67,13 @@ const IMAGE_BOARD_POSTS = {
     comments: [
       { nick: 'ㅇㅇ', ip: '223.38', time: '01:48', text: '제목만 보고 주작인 줄 알았는데 사진 보고 말문 막힘ㅋㅋ' },
       { nick: 'ㅇㅇ', ip: '118.235', time: '01:48', text: '애인 중 한 명이라는 문장부터 이미 정상참작 불가임' },
-      { nick: '부산사람아님', ip: '211.246', time: '01:49', text: '이 정도면 바람이 아니라 태풍 경보 아니냐' },
-      { nick: 'ㅇㅇ', ip: '39.7', time: '01:49', text: 'ㄴ 한이대 방어선보다 윤호랑 해명문이 먼저 무너질 듯', reply: true },
-      { nick: '호랑이검거반', ip: '106.102', time: '01:50', text: '남의 침대에서 “아이가 오해다” 시전하면 진짜 레전드' },
-      { nick: 'ㅇㅇ', ip: '175.223', time: '01:51', text: '현애인추정 닉네임 개무섭네. 전애인도 아니고 현애인임' },
-      { nick: 'ㅇㅇ', ip: '223.62', time: '01:52', text: 'ㄴ 다음 글: 현애인2 등장했습니다', reply: true },
-      { nick: 'B반관전자', ip: '121.162', time: '01:53', text: '수인화보다 빠른 게 플러팅 회전율이었노' },
-      { nick: 'ㅇㅇ', ip: '39.7', time: '01:54', text: '한이대 ㄱㅅㄲ 박제합니다가 아니라 한이대 게시판 전체 공지로 올려야 됨' }
+      { nick: '부산사람아님', ip: '211.246', time: '01:49', text: '해명 나오기 전에 사진부터 떠서 이미 판 끝난 것 같은데' },
+      { nick: 'ㅇㅇ', ip: '39.7', time: '01:49', text: 'ㄴ 그래서 해명문 첫 줄이 제일 궁금함. 오해라고 시작하면 바로 개념글', reply: true },
+      { nick: '호랑이검거반', ip: '106.102', time: '01:50', text: '남의 침대에서 속옷만 입고 있으면 변명 난이도 너무 높지 않냐' },
+      { nick: 'ㅇㅇ', ip: '175.223', time: '01:51', text: '사진 각도 보니까 몰래 찍은 게 아니라 현장에서 딱 걸린 쪽 같은데' },
+      { nick: 'ㅇㅇ', ip: '223.62', time: '01:52', text: 'ㄴ 표정까지 찍혔으면 오늘 한이대갤 잠 못 잔다', reply: true },
+      { nick: 'B반관전자', ip: '121.162', time: '01:53', text: '수인화보다 빠른 게 상황 악화 속도였네' },
+      { nick: 'ㅇㅇ', ip: '39.7', time: '01:54', text: '이건 사과문 올라오면 제목만으로도 다시 념글 갈 듯' }
     ]
   },
   'lee-rok': {
@@ -947,6 +947,7 @@ function initHanidaeSim() {
   const history = [];
   let vnAudioContext;
   let vnVideoStarted = false;
+  let vnVideoCompleted = false;
   let vnSessionActive = false;
   let vnInView = true;
   let forceVnBgmUntil = 0;
@@ -1158,6 +1159,7 @@ function initHanidaeSim() {
     const scene = script[index];
     if(!scene.video || vnVideoStarted) return false;
     vnVideoStarted = true;
+    vnVideoCompleted = false;
     vnSessionActive = true;
     vnInView = isVnStageInView();
     forceVnBgmUntil = performance.now() + 4000;
@@ -1165,6 +1167,7 @@ function initHanidaeSim() {
     root.dataset.video = 'playing';
     videoStart.classList.remove('active');
     videoStart.disabled = true;
+    next.disabled = true;
     syncVnBgm();
     video.muted = false;
     video.currentTime = 0;
@@ -1217,6 +1220,7 @@ function initHanidaeSim() {
       video.currentTime = 0;
       video.muted = false;
       vnVideoStarted = false;
+      vnVideoCompleted = false;
       root.dataset.video = 'ready';
       videoStart.textContent = scene.videoStartLabel || '입문시뮬 시작';
       videoStart.disabled = false;
@@ -1228,6 +1232,7 @@ function initHanidaeSim() {
       video.load();
       video.muted = true;
       vnVideoStarted = false;
+      vnVideoCompleted = false;
       root.dataset.video = 'none';
       videoStart.disabled = true;
       videoStart.classList.remove('active');
@@ -1263,7 +1268,7 @@ function initHanidaeSim() {
         choices.appendChild(btn);
       });
     } else {
-      next.disabled = false;
+      next.disabled = Boolean(scene.video && !vnVideoCompleted);
       renderReport();
     }
     if(scene.entryEffect) flashStage(scene.entryEffect);
@@ -1277,7 +1282,13 @@ function initHanidaeSim() {
   function advanceScene() {
     const scene = script[index];
     if(scene.choices) return;
-    if(startSceneVideo()) return;
+    if(scene.video) {
+      if(!vnVideoStarted) {
+        startSceneVideo();
+        return;
+      }
+      if(!vnVideoCompleted) return;
+    }
     const nextIndex = scene.next ?? 'start';
     const nextScene = script[nextIndex];
     playVnClick(nextScene?.entryEffect || 'soft');
@@ -1302,7 +1313,22 @@ function initHanidaeSim() {
   stage.addEventListener('click', advanceScene);
   videoStart.addEventListener('click', event => {
     event.stopPropagation();
+    if(vnVideoStarted && vnVideoCompleted) {
+      advanceScene();
+      return;
+    }
     startSceneVideo();
+  });
+
+  video.addEventListener('ended', () => {
+    const scene = script[index];
+    if(!scene?.video || !vnVideoStarted) return;
+    vnVideoCompleted = true;
+    root.dataset.video = 'ended';
+    next.disabled = false;
+    videoStart.textContent = '다음 진행';
+    videoStart.disabled = false;
+    videoStart.classList.add('active');
   });
 
   if('IntersectionObserver' in window) {
